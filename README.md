@@ -30,7 +30,7 @@ Example:
 ```
 mesh_generator input_triangles.off U input_tetmesh.tet
 ```
-creates a file called ``volume.msh`` representing the volume mesh enclosed by the input.
+creates a file called ``volume.msh`` representing the (subdivided) volume mesh with input triangles embedded.
 
 The input tetrahedral mesh may be represented in either TET or MEDIT format (both ASCII).
 
