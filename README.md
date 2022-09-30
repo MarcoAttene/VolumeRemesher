@@ -7,9 +7,9 @@ In this version, a new function is made available to embed a set of triangles wi
 See embed.h to start.
 
 ## Usage
-Clone this repository, including submodules, with:
+Clone this repository with:
 ```
-git clone --recursive https://github.com/MarcoAttene/VolumeRemesher
+git clone https://github.com/MarcoAttene/VolumeRemesher
 ```
 Once done, you may build the executable as follows:
 ```
