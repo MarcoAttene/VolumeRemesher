@@ -44,6 +44,12 @@
 #include <iostream>
 #include "memPool.h"
 
+#define USE_GNU_GMP_CLASSES
+
+#ifdef USE_GNU_GMP_CLASSES
+#include <gmpxx.h>
+#endif
+
 // Call the following function (once per thread) before using these number types
 void initFPU();
 
@@ -382,7 +388,10 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 		static void print(const int elen, const double* e) { for (int i = 0; i < elen; i++) printf("%e ", e[i]); printf("\n");}
 	};
 
-
+#ifdef USE_GNU_GMP_CLASSES
+	typedef mpq_class bigfloat;
+	typedef mpq_class bigrational;
+#else
 	/////////////////////////////////////////////////////////////////////
 	// 	   
 	// 	   B I G   N A T U R A L
@@ -403,8 +412,10 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 		uint32_t m_size;		// Actual number of digits
 		uint32_t m_capacity;	// Current vector capacity
 
-		inline static uint32_t *BN_ALLOC(uint32_t num_bytes) { return (uint32_t *)nfgMemoryPool.alloc(num_bytes); }
-		inline static void BN_FREE(uint32_t *ptr) { nfgMemoryPool.release(ptr); }
+		inline static uint32_t* BN_ALLOC(uint32_t num_bytes) { return (uint32_t*)nfgMemoryPool.alloc(num_bytes); }
+		inline static void BN_FREE(uint32_t* ptr) { nfgMemoryPool.release(ptr); }
+		//inline static uint32_t* BN_ALLOC(uint32_t num_bytes) { return (uint32_t*)malloc(num_bytes); }
+		//inline static void BN_FREE(uint32_t* ptr) { free(ptr); }
 
 		void init(const bignatural& m);
 		void init(const uint64_t m); 
@@ -417,7 +428,7 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 
 		bignatural(const bignatural& m) { init(m); }
 
-		bignatural(bignatural&& m) : digits(m.digits), m_size(m.m_size), m_capacity(m.m_capacity) { 
+		bignatural(bignatural&& m) noexcept : digits(m.digits), m_size(m.m_size), m_capacity(m.m_capacity) { 
 			m.digits = nullptr;
 		}
 
@@ -529,6 +540,15 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 
 		// Count number of zeroes on the left (most significant digits)
 		uint32_t countLeadingZeroes() const;
+
+		// Count number of zeroes on the right of the last 1 in the least significant limb
+		// Assumes that number is not zero and last limb is not zero!
+		uint32_t countEndingZeroesLSL() const {
+			const uint32_t d = back();
+			uint32_t i = 31;
+			while (!(d << i)) i--;
+			return 31 - i;
+		}
 
 		inline void pack() {
 			uint32_t i = 0;
@@ -769,6 +789,7 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 		os << p.get_dec_str();
 		return os;
 	}
+#endif // USE_GNU_GMP_CLASSES
 
 #include "numerics.hpp"
 

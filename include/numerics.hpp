@@ -411,6 +411,7 @@ inline int expansionObject::Gen_Product_With_PreAlloc(const int alen, const doub
 
 
 
+#ifndef USE_GNU_GMP_CLASSES
 
 inline void bignatural::init(const bignatural& m) {
 	m_size = m.m_size;
@@ -701,13 +702,18 @@ inline uint32_t bignatural::countEndingZeroes() const {
 		i--; shft += 32;
 	}
 
-	uint32_t s = UINT32_MAX;
-	uint32_t m = digits[i];
-	while ((s & m) == m) {
-		s <<= 1;
-		shft++;
-	}
-	return shft - 1;
+	const uint32_t d = digits[i];
+	uint32_t j = 31;
+	while (!(d << j)) j--;
+	return shft + 31 - j;
+
+	//uint32_t s = UINT32_MAX;
+	//uint32_t m = digits[i];
+	//while ((s & m) == m) {
+	//	s <<= 1;
+	//	shft++;
+	//}
+	//return shft - 1;
 }
 
 inline uint32_t bignatural::countLeadingZeroes() const {
@@ -1017,17 +1023,17 @@ inline std::string bigfloat::get_str() const {
 }
 
 inline void bigfloat::pack() {
-	while (!mantissa.empty() && mantissa.back() == 0) {
-		mantissa.pop_back();
-		exponent += 32;
-	}
-
 	if (mantissa.empty()) {
 		sign = exponent = 0;
 		return;
 	}
 
-	const uint32_t s = mantissa.countEndingZeroes();
+	while (mantissa.back() == 0) {
+		mantissa.pop_back();
+		exponent += 32;
+	}
+
+	const uint32_t s = mantissa.countEndingZeroesLSL();
 	if (s) {
 		for (int i = (int)mantissa.size() - 1; i > 0; i--) {
 			mantissa[i] >>= s;
@@ -1166,3 +1172,5 @@ inline std::string bigrational::get_str() const {
 	st += denominator.get_str();
 	return st;
 }
+
+#endif // USE_GNU_GMP_CLASSES

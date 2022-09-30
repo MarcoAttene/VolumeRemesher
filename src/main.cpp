@@ -127,6 +127,8 @@ void read_MEDIT_file(const char* filename, double** vertices_p, uint32_t* npts,
     *ntet = nt;
 }
 
+#include "embed.h"
+
 /// <summary>
 /// Main function
 /// </summary>
@@ -203,9 +205,9 @@ int main(int argc, char** argv)
     bool logging = false;
     bool surfmesh = false;
     bool blackfaces = false;
-    char* fileA_name = "D:\\SYNC_DATA\\Sviluppo_Software\\Lorenzo\\volume_mesher-master\\models\\dog.off";
-    char* fileB_name = "";
-    char bool_opcode = '0';
+    char* fileA_name = "D:\\SYNC_DATA\\Sviluppo_Software\\My_Software\\GIT_REPOS\\VolumeRemesher\\models\\Octocat-v1.off";
+    char* fileB_name = "D:\\SYNC_DATA\\Sviluppo_Software\\My_Software\\GIT_REPOS\\VolumeRemesher\\models\\Octocat.bg.tet";
+    char bool_opcode = 'U';
     bool two_input = (bool_opcode != '0');
 #endif
 
@@ -227,6 +229,27 @@ int main(int argc, char** argv)
     if (embedsurf) {
         if (file_B_is_tet) read_TET_file(fileB_name, &coords_B, &ncoords_B, &tri_idx_B, &ntriidx_B, verbose);
         else read_MEDIT_file(fileB_name, &coords_B, &ncoords_B, &tri_idx_B, &ntriidx_B, verbose);
+
+        //const std::vector<double> tri_vrt_coords(coords_A, coords_A + ncoords_A * 3);
+        //const std::vector<uint32_t> triangle_indexes(tri_idx_A, tri_idx_A + ntriidx_A * 3);
+        //const std::vector<double> tet_vrt_coords(coords_B, coords_B + ncoords_B * 3);
+        //const std::vector<uint32_t> tet_indexes(tri_idx_B, tri_idx_B + ntriidx_B * 4);
+        //std::vector<bigrational> vertices;
+        //std::vector<uint32_t> facets;
+        //std::vector<uint32_t> cells;
+        //std::vector<uint32_t> facets_on_input;
+
+        //embed_tri_in_poly_mesh(
+        //    tri_vrt_coords,
+        //    triangle_indexes,
+        //    tet_vrt_coords,
+        //    tet_indexes,
+        //    vertices,
+        //    facets,
+        //    cells,
+        //    facets_on_input,
+        //    verbose
+        //);
 
         complex = remakePolyhedralMesh(
             coords_A, ncoords_A, tri_idx_A, ntriidx_A,

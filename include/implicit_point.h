@@ -120,7 +120,7 @@ public:
 	std::string get_str() const {
 		bigrational x, y, z;
 		if (!getExactXYZCoordinates(x, y, z)) return "UNDEFINED_GENERIC_POINT";
-		return x.get_dec_str() + " " + y.get_dec_str() + " " + z.get_dec_str();
+		return x.get_str() + " " + y.get_str() + " " + z.get_str();
 	}
 
 	// These are the indirect predicates supported up to now.

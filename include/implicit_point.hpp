@@ -853,7 +853,7 @@ inline bool implicitPoint2D_SSI::getExactXYCoordinates(bigrational& x, bigration
 {
 	bigfloat lx, ly, d;
 	getBigfloatLambda(lx, ly, d);
-	if (d.sgn() == 0) return false;
+	if (sgn(d) == 0) return false;
 	const bigrational rd(d);
 	x = bigrational(lx) / rd;
 	y = bigrational(ly) / rd;
@@ -864,7 +864,7 @@ inline bool implicitPoint3D_LPI::getExactXYZCoordinates(bigrational& x, bigratio
 {
 	bigfloat lx, ly, lz, d;
 	getBigfloatLambda(lx, ly, lz, d);
-	if (d.sgn() == 0) return false;
+	if (sgn(d) == 0) return false;
 	const bigrational rd(d);
 	x = bigrational(lx) / rd;
 	y = bigrational(ly) / rd;
@@ -876,7 +876,7 @@ inline bool implicitPoint3D_TPI::getExactXYZCoordinates(bigrational& x, bigratio
 {
 	bigfloat lx, ly, lz, d;
 	getBigfloatLambda(lx, ly, lz, d);
-	if (d.sgn() == 0) return false;
+	if (sgn(d) == 0) return false;
 	const bigrational rd(d);
 	x = bigrational(lx) / rd;
 	y = bigrational(ly) / rd;
@@ -888,7 +888,7 @@ inline bool implicitPoint3D_LNC::getExactXYZCoordinates(bigrational& x, bigratio
 {
 	bigfloat lx, ly, lz, d;
 	getBigfloatLambda(lx, ly, lz, d);
-	if (d.sgn()==0) return false;
+	if (sgn(d) ==0) return false;
 	const bigrational rd(d);
 	x = bigrational(lx) / rd;
 	y = bigrational(ly) / rd;

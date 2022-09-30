@@ -37,6 +37,13 @@ set(ALL_TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_lib)
 
 foreach (TARGET ${ALL_TARGETS})
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	set(GMP_HOME_DIR "D:/SYNC_DATA/Sviluppo_Software/Third_Party/mpir-master/msvc/vs19")
+	set(GMPC_HOME_DIR ${GMP_HOME_DIR}/lib_mpir_gc/x64/Release)
+	set(GMPXX_HOME_DIR ${GMP_HOME_DIR}/lib_mpir_cxx/x64/Release)
+	set(GMP_INCLUDE_DIR ${GMPXX_HOME_DIR})
+	set(GMP_LIB_DIR ${GMPC_HOME_DIR} ${GMPXX_HOME_DIR})
+	set(GMP_LIB_NAME "mpir")
+
 # grant IEEE 754 compliance
 	target_compile_options(${TARGET} PUBLIC "/fp:strict")
 # use intrinsic functions
@@ -48,6 +55,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 # workaround for known bug in C++17 on MSVC
 	target_compile_options(${TARGET} PUBLIC "/D _HAS_STD_BYTE=0")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	set(GMP_HOME_DIR "gmp/6.2.1_1")
+	set(GMP_LIB_NAME "gmp")
+	set(GMP_INCLUDE_DIR ${GMP_HOME_DIR}/include)
+	set(GMP_LIB_DIR ${GMP_HOME_DIR}/lib)
+
 # set standard optimization level
 	target_compile_options(${TARGET} PUBLIC -O2)
 # grant IEEE 754 compliance
@@ -55,6 +67,11 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 # reserve enough stack size	
 	target_compile_options(${TARGET} PUBLIC -Wl,-z,stacksize=8421376)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	set(GMP_HOME_DIR "gmp/6.2.1_1")
+	set(GMP_LIB_NAME "gmp")
+	set(GMP_INCLUDE_DIR ${GMP_HOME_DIR}/include)
+	set(GMP_LIB_DIR ${GMP_HOME_DIR}/lib)
+
 #Disable all optimizations
 	target_compile_options(${TARGET} PUBLIC -O0)
 # reserve enough stack size	
@@ -65,6 +82,11 @@ endif()
 target_include_directories(${TARGET} PUBLIC
 	src
 	include
+	${GMP_INCLUDE_DIR}
 )
+
+target_link_directories(${TARGET} PUBLIC ${GMP_LIB_DIR})
+target_link_libraries(${TARGET} PUBLIC ${GMP_LIB_NAME})
+
 endforeach(TARGET)
 
