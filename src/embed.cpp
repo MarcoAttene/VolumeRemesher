@@ -26,14 +26,17 @@ void embed_tri_in_poly_mesh(
 	const std::vector<double>& tet_vrt_coords,
 	const std::vector<uint32_t>& tet_indexes,
 	std::vector<bigrational>& out_vrt_coords,
-	std::vector<uint32_t>& out_poly_indexes,
+	std::vector<uint32_t>& out_poly_vindexes,
+	std::vector<uint32_t>& out_cell_findexes,
+	std::vector<uint32_t>& facets_on_input,
 	bool verbose
 	)
 {
 	// Make a conformal polyhedralization
 	BSPcomplex* complex = remakePolyhedralMesh(
 		tri_vrt_coords.data(), (uint32_t)tri_vrt_coords.size(), triangle_indexes.data(), (uint32_t)triangle_indexes.size(),
-		tet_vrt_coords.data(), (uint32_t)tet_vrt_coords.size(), tet_indexes.data(), (uint32_t)tet_indexes.size(), verbose);
+		tet_vrt_coords.data(), (uint32_t)tet_vrt_coords.size(), tet_indexes.data(), (uint32_t)tet_indexes.size(), verbose,
+		true);
 
 	// Get exact vertex coordinates
 	out_vrt_coords.reserve(complex->vertices.size() * 3);
@@ -47,14 +50,20 @@ void embed_tri_in_poly_mesh(
 		else ip_error("embed_tri_in_poly_mesh: could not compute exact coordinates. Should not happen!\n");
 	}
 
+	// Get facets
+	for (size_t f_id = 0; f_id < complex->faces.size(); f_id++) {
+		BSPface& face = complex->faces[f_id];
+		std::vector<uint32_t> face_vrts;
+		complex->list_faceVertices(face, face_vrts);
+		out_poly_vindexes.push_back((uint32_t)face_vrts.size());
+		for (uint32_t cvi : face_vrts) out_poly_vindexes.push_back(cvi);
+		if (face.colour == BLACK_A) facets_on_input.push_back((uint32_t)f_id);
+	}
+
 	// Get polyhedra
 	for (uint64_t c_id = 0; c_id < complex->cells.size(); c_id++) {
 		BSPcell& cell = complex->cells[c_id];
-		uint64_t numce = complex->count_cellEdges(cell);
-		uint32_t numcv = complex->count_cellVertices(cell, &numce);
-		std::vector<uint32_t> cell_vrts(numcv);
-		complex->list_cellVertices(cell, numce, cell_vrts);
-		out_poly_indexes.push_back((uint32_t)cell_vrts.size());
-		for (uint32_t cvi : cell_vrts) out_poly_indexes.push_back(cvi);
+		out_cell_findexes.push_back((uint32_t)cell.faces.size());
+		for (uint64_t cfi : cell.faces) out_cell_findexes.push_back((uint32_t)cfi);
 	}
 }

@@ -9,7 +9,7 @@ endif()
 project(mesh_generator)
 
 # specify the C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set (SOURCES
@@ -20,10 +20,6 @@ set (SOURCES
     src/extended_predicates.cpp
     src/BSP.cpp
     src/inOutPartition.cpp
-    Indirect_Predicates-master/implicit_point.cpp
-    Indirect_Predicates-master/numerics.cpp
-    Indirect_Predicates-master/predicates/hand_optimized_predicates.cpp
-    Indirect_Predicates-master/predicates/indirect_predicates.cpp
 )
 
 # add the executable
@@ -49,6 +45,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	target_link_options(${TARGET} PUBLIC "/STACK:8421376")
 # turn off annoying warnings
 	target_compile_options(${TARGET} PUBLIC "/D _CRT_SECURE_NO_WARNINGS")
+# workaround for known bug in C++17 on MSVC
+	target_compile_options(${TARGET} PUBLIC "/D _HAS_STD_BYTE=0")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 # set standard optimization level
 	target_compile_options(${TARGET} PUBLIC -O2)
@@ -66,8 +64,7 @@ endif()
 # Public include directory
 target_include_directories(${TARGET} PUBLIC
 	src
-	Indirect_Predicates-master
-	Indirect_Predicates-master/predicates
+	include
 )
 endforeach(TARGET)
 

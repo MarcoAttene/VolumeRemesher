@@ -852,7 +852,6 @@ void TetMesh::insertExistingVerticesNonDelaunay(const uint32_t first) {
     uint64_t ct = 0;
     for (uint32_t i = first; i < num_vertices; i++)
         insertExistingVertexNonDelaunay(i, ct);
-  //  insertExistingVertex(i, ct);
 
     tet_num_vertices = num_vertices;
 

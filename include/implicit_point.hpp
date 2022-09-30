@@ -58,7 +58,7 @@ inline int lessThan_II(const genericPoint& p1, const genericPoint& p2)
 inline int lessThan_EE(const genericPoint& a, const genericPoint& b) { return lessThan_EE(a.toExplicit3D().X(), a.toExplicit3D().Y(), a.toExplicit3D().Z(), b.toExplicit3D().X(), b.toExplicit3D().Y(), b.toExplicit3D().Z()); }
 inline int lessThan_IE(const genericPoint& a, const genericPoint& b) { return lessThan_IE(a, b.toExplicit3D().X(), b.toExplicit3D().Y(), b.toExplicit3D().Z()); }
 
-int genericPoint::lessThan(const genericPoint& a, const genericPoint& b)
+inline int genericPoint::lessThan(const genericPoint& a, const genericPoint& b)
 {
 		if (a.isExplicit3D() && b.isExplicit3D()) return lessThan_EE(a, b);
 		if (!a.isExplicit3D() && b.isExplicit3D()) return lessThan_IE(a, b);
@@ -68,7 +68,7 @@ int genericPoint::lessThan(const genericPoint& a, const genericPoint& b)
 
 inline int lessThanOnX_IE(const genericPoint& a, const genericPoint& b) { return lessThanOnX_IE(a, b.toExplicit3D().X()); }
 
-int genericPoint::lessThanOnX(const genericPoint& a, const genericPoint& b)
+inline int genericPoint::lessThanOnX(const genericPoint& a, const genericPoint& b)
 {
 	if (a.isExplicit3D() && b.isExplicit3D()) return a.toExplicit3D().X() < b.toExplicit3D().X();
 	if (!a.isExplicit3D() && b.isExplicit3D()) return lessThanOnX_IE(a, b);
@@ -78,7 +78,7 @@ int genericPoint::lessThanOnX(const genericPoint& a, const genericPoint& b)
 
 inline int lessThanOnY_IE(const genericPoint& a, const genericPoint& b) { return lessThanOnY_IE(a, b.toExplicit3D().Y()); }
 
-int genericPoint::lessThanOnY(const genericPoint& a, const genericPoint& b)
+inline int genericPoint::lessThanOnY(const genericPoint& a, const genericPoint& b)
 {
 	if (a.isExplicit3D() && b.isExplicit3D()) return a.toExplicit3D().Y() < b.toExplicit3D().Y();
 	if (!a.isExplicit3D() && b.isExplicit3D()) return lessThanOnY_IE(a, b);
@@ -88,7 +88,7 @@ int genericPoint::lessThanOnY(const genericPoint& a, const genericPoint& b)
 
 inline int lessThanOnZ_IE(const genericPoint& a, const genericPoint& b) { return lessThanOnZ_IE(a, b.toExplicit3D().Z()); }
 
-int genericPoint::lessThanOnZ(const genericPoint& a, const genericPoint& b)
+inline int genericPoint::lessThanOnZ(const genericPoint& a, const genericPoint& b)
 {
 	if (a.isExplicit3D() && b.isExplicit3D()) return a.toExplicit3D().Z() < b.toExplicit3D().Z();
 	if (!a.isExplicit3D() && b.isExplicit3D()) return lessThanOnZ_IE(a, b);
@@ -101,7 +101,7 @@ inline int orient2d_IEE(const genericPoint& a, const genericPoint& b, const gene
 inline int orient2d_IIE(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2d_indirect_IIE(a.toSSI(), b.toSSI(), c.toExplicit2D().X(), c.toExplicit2D().Y()); }
 inline int orient2d_III(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2d_indirect_III(a.toSSI(), b.toSSI(), c.toSSI()); }
 
-int genericPoint::orient2D(const genericPoint& a, const genericPoint& b, const genericPoint& c)
+inline int genericPoint::orient2D(const genericPoint& a, const genericPoint& b, const genericPoint& c)
 {
 	// Here we implicitly assume that points are 2D. Do not check.
 
@@ -121,7 +121,7 @@ inline int orient2dxy_IEE(const genericPoint& a, const genericPoint& b, const ge
 inline int orient2dxy_IIE(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2dxy_indirect_IIE(a, b, c.toExplicit3D().X(), c.toExplicit3D().Y()); }
 inline int orient2dxy_III(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2dxy_indirect_III(a, b, c); }
 
-int genericPoint::orient2Dxy(const genericPoint& a, const genericPoint& b, const genericPoint& c)
+inline int genericPoint::orient2Dxy(const genericPoint& a, const genericPoint& b, const genericPoint& c)
 {
 	if (a.isExplicit3D() && b.isExplicit3D() && c.isExplicit3D()) return orient2dxy_EEE(a, b, c);
 
@@ -142,7 +142,7 @@ inline int orient2dyz_IEE(const genericPoint& a, const genericPoint& b, const ge
 inline int orient2dyz_IIE(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2dyz_indirect_IIE(a, b, c.toExplicit3D().Y(), c.toExplicit3D().Z()); }
 inline int orient2dyz_III(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2dyz_indirect_III(a, b, c); }
 
-int genericPoint::orient2Dyz(const genericPoint& a, const genericPoint& b, const genericPoint& c)
+inline int genericPoint::orient2Dyz(const genericPoint& a, const genericPoint& b, const genericPoint& c)
 {
 	if (a.isExplicit3D() && b.isExplicit3D() && c.isExplicit3D()) return orient2dyz_EEE(a, b, c);
 
@@ -163,7 +163,7 @@ inline int orient2dzx_IEE(const genericPoint& a, const genericPoint& b, const ge
 inline int orient2dzx_IIE(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2dzx_indirect_IIE(a, b, c.toExplicit3D().Z(), c.toExplicit3D().X()); }
 inline int orient2dzx_III(const genericPoint& a, const genericPoint& b, const genericPoint& c) { return orient2dzx_indirect_III(a, b, c); }
 
-int genericPoint::orient2Dzx(const genericPoint& a, const genericPoint& b, const genericPoint& c)
+inline int genericPoint::orient2Dzx(const genericPoint& a, const genericPoint& b, const genericPoint& c)
 {
 	if (a.isExplicit3D() && b.isExplicit3D() && c.isExplicit3D()) return orient2dzx_EEE(a, b, c);
 
@@ -203,11 +203,11 @@ inline int orient3d_IIIE(const genericPoint& a, const genericPoint& b, const gen
 }
 
 
-int genericPoint::orient3D(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d)
+inline int genericPoint::orient3D(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d)
 {
 	// Here we implicitly assume that points are 3D. Do not check.
 
-	int i = a.isExplicit3D() + b.isExplicit3D() + c.isExplicit3D() + d.isExplicit3D();
+	const int i = a.isExplicit3D() + b.isExplicit3D() + c.isExplicit3D() + d.isExplicit3D();
 
 	if (i == 4) return orient3d_EEEE(a, b, c, d);
 	
@@ -266,7 +266,7 @@ inline int inSphere_IIIIE(const genericPoint& a, const genericPoint& b, const ge
 		e.toExplicit3D().X(), e.toExplicit3D().Y(), e.toExplicit3D().Z());
 }
 
-int genericPoint::inSphere(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d, const genericPoint& e)
+inline int genericPoint::inSphere(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d, const genericPoint& e)
 {
 	const int num_explicit = a.isExplicit3D() + b.isExplicit3D() + c.isExplicit3D() + d.isExplicit3D() + e.isExplicit3D();
 
@@ -321,9 +321,9 @@ inline int incircle2d_IIIE(const genericPoint& a, const genericPoint& b, const g
 }
 
 
-int genericPoint::incircle(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d)
+inline int genericPoint::incircle(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d)
 {
-	int i = a.isExplicit2D() + b.isExplicit2D() + c.isExplicit2D() + d.isExplicit2D();
+	const int i = a.isExplicit2D() + b.isExplicit2D() + c.isExplicit2D() + d.isExplicit2D();
 
 	if (i == 4) return incircle2d_EEEE(a, b, c, d);
 
@@ -377,7 +377,7 @@ inline int incircle2dxy_IIIE(const genericPoint& a, const genericPoint& b, const
 }
 
 
-int genericPoint::incirclexy(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d)
+inline int genericPoint::incirclexy(const genericPoint& a, const genericPoint& b, const genericPoint& c, const genericPoint& d)
 {
 	int i = a.isExplicit3D() + b.isExplicit3D() + c.isExplicit3D() + d.isExplicit3D();
 
@@ -414,30 +414,32 @@ int genericPoint::incirclexy(const genericPoint& a, const genericPoint& b, const
 
 
 // These functions assume that point is an SSI
-bool genericPoint::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& d) const {
+inline bool genericPoint::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& d) const {
 	return toSSI().getIntervalLambda(lx, ly, d);
 }
 
-void genericPoint::getExactLambda(double** lx, int& lxl, double** ly, int& lyl, double** d, int& dl) const {
+inline void genericPoint::getExactLambda(double** lx, int& lxl, double** ly, int& lyl, double** d, int& dl) const {
 	toSSI().getExactLambda(lx, lxl, ly, lyl, d, dl);
 }
-void genericPoint::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& d) const {
+
+inline void genericPoint::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& d) const {
 	toSSI().getBigfloatLambda(lx, ly, d);
 }
 
 // These functions assume that point is an implicit 3D
-bool genericPoint::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const {
+inline bool genericPoint::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const {
 	if (isLPI()) return toLPI().getIntervalLambda(lx, ly, lz, d);
 	else if (isTPI()) return toTPI().getIntervalLambda(lx, ly, lz, d);
 	else return toLNC().getIntervalLambda(lx, ly, lz, d);
 }
 
-void genericPoint::getExactLambda(double** lx, int& lxl, double** ly, int& lyl, double** lz, int& lzl, double** d, int& dl) const {
+inline void genericPoint::getExactLambda(double** lx, int& lxl, double** ly, int& lyl, double** lz, int& lzl, double** d, int& dl) const {
 	if (isLPI()) toLPI().getExactLambda(lx, lxl, ly, lyl, lz, lzl, d, dl);
 	else if (isTPI()) toTPI().getExactLambda(lx, lxl, ly, lyl, lz, lzl, d, dl);
 	else toLNC().getExactLambda(lx, lxl, ly, lyl, lz, lzl, d, dl);
 }
-void genericPoint::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const {
+
+inline void genericPoint::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const {
 	if (isLPI()) toLPI().getBigfloatLambda(lx, ly, lz, d);
 	else if (isTPI()) toTPI().getBigfloatLambda(lx, ly, lz, d);
 	else toLNC().getBigfloatLambda(lx, ly, lz, d);
@@ -445,7 +447,7 @@ void genericPoint::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, b
 
 // Type-specific lambdas
 
-bool implicitPoint2D_SSI::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number &d) const
+inline bool implicitPoint2D_SSI::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number &d) const
 {
 	if (needsIntervalLambda())
 	{
@@ -463,7 +465,7 @@ bool implicitPoint2D_SSI::getIntervalLambda(interval_number& lx, interval_number
 	return (dfilter_denominator.signIsReliable());
 }
 
-bool implicitPoint3D_LPI::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number &d) const
+inline bool implicitPoint3D_LPI::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number &d) const
 {
 	if (needsIntervalLambda())
 	{
@@ -482,7 +484,7 @@ bool implicitPoint3D_LPI::getIntervalLambda(interval_number& lx, interval_number
 	return (dfilter_denominator.signIsReliable());
 }
 
-bool implicitPoint3D_TPI::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const
+inline bool implicitPoint3D_TPI::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const
 {
 	if (needsIntervalLambda())
 	{
@@ -506,7 +508,7 @@ bool implicitPoint3D_TPI::getIntervalLambda(interval_number& lx, interval_number
 	return (dfilter_denominator.signIsReliable());
 }
 
-bool implicitPoint3D_LNC::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const
+inline bool implicitPoint3D_LNC::getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const
 {
 	if (needsIntervalLambda())
 	{
@@ -526,7 +528,7 @@ bool implicitPoint3D_LNC::getIntervalLambda(interval_number& lx, interval_number
 }
 
 
-void implicitPoint2D_SSI::getExactLambda(double **lx, int& lxl, double **ly, int& lyl, double **d, int& dl) const
+inline void implicitPoint2D_SSI::getExactLambda(double **lx, int& lxl, double **ly, int& lyl, double **d, int& dl) const
 {
 	lambda2d_SSI_exact(l1_1.X(), l1_1.Y(), l1_2.X(), l1_2.Y(), l2_1.X(), l2_1.Y(), l2_2.X(), l2_2.Y(), lx, lxl, ly, lyl, d, dl);
 	if ((*d)[dl - 1] < 0)
@@ -538,7 +540,7 @@ void implicitPoint2D_SSI::getExactLambda(double **lx, int& lxl, double **ly, int
 }
 
 // Keeps lambda/d pairs as close to one as possible to avoid under/overflows
-void normalizeLambda3D(double* lx, int& lxl, double* ly, int& lyl, double* lz, int& lzl, double* d, int& dl)
+inline void normalizeLambda3D(double* lx, int& lxl, double* ly, int& lyl, double* lz, int& lzl, double* d, int& dl)
 {
 	double maxd, maxsd, ad, aad;
 	maxsd = expansionObject::To_Double(lxl, lx);
@@ -557,7 +559,7 @@ void normalizeLambda3D(double* lx, int& lxl, double* ly, int& lyl, double* lz, i
 	expansionObject::ExactScale(dl, d, m);
 }
 
-void implicitPoint3D_LPI::getExactLambda(double **lx, int& lxl, double **ly, int& lyl, double **lz, int& lzl, double **d, int& dl) const
+inline void implicitPoint3D_LPI::getExactLambda(double **lx, int& lxl, double **ly, int& lyl, double **lz, int& lzl, double **d, int& dl) const
 {
 	lambda3d_LPI_exact(P().X(), P().Y(), P().Z(), Q().X(), Q().Y(), Q().Z(), R().X(), R().Y(), R().Z(), S().X(), S().Y(), S().Z(), T().X(), T().Y(), T().Z(), lx, lxl, ly, lyl, lz, lzl, d, dl);
 	if ((*d)[dl - 1] < 0)
@@ -570,7 +572,7 @@ void implicitPoint3D_LPI::getExactLambda(double **lx, int& lxl, double **ly, int
 	normalizeLambda3D(*lx, lxl, *ly, lyl, *lz, lzl, *d, dl);
 }
 
-void implicitPoint3D_TPI::getExactLambda(double **lx, int& lxl, double **ly, int& lyl, double **lz, int& lzl, double **d, int& dl) const
+inline void implicitPoint3D_TPI::getExactLambda(double **lx, int& lxl, double **ly, int& lyl, double **lz, int& lzl, double **d, int& dl) const
 {
 	lambda3d_TPI_exact(V1().X(), V1().Y(), V1().Z(), V2().X(), V2().Y(), V2().Z(), V3().X(), V3().Y(), V3().Z(),
 		W1().X(), W1().Y(), W1().Z(), W2().X(), W2().Y(), W2().Z(), W3().X(), W3().Y(), W3().Z(),
@@ -585,7 +587,7 @@ void implicitPoint3D_TPI::getExactLambda(double **lx, int& lxl, double **ly, int
 	normalizeLambda3D(*lx, lxl, *ly, lyl, *lz, lzl, *d, dl);
 }
 
-void implicitPoint3D_LNC::getExactLambda(double** lx, int& lxl, double** ly, int& lyl, double** lz, int& lzl, double** d, int& dl) const
+inline void implicitPoint3D_LNC::getExactLambda(double** lx, int& lxl, double** ly, int& lyl, double** lz, int& lzl, double** d, int& dl) const
 {
 	lambda3d_LNC_exact(P().X(), P().Y(), P().Z(), Q().X(), Q().Y(), Q().Z(), T(), lx, lxl, ly, lyl, lz, lzl, d, dl);
 	if ((*d)[dl - 1] < 0)
@@ -598,7 +600,7 @@ void implicitPoint3D_LNC::getExactLambda(double** lx, int& lxl, double** ly, int
 	normalizeLambda3D(*lx, lxl, *ly, lyl, *lz, lzl, *d, dl);
 }
 
-void implicitPoint2D_SSI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& d) const
+inline void implicitPoint2D_SSI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& d) const
 {
 	lambda2d_SSI_bigfloat(l1_1.X(), l1_1.Y(), l1_2.X(), l1_2.Y(), l2_1.X(), l2_1.Y(), l2_2.X(), l2_2.Y(), lx, ly, d);
 	if (sgn(d) < 0)
@@ -609,7 +611,7 @@ void implicitPoint2D_SSI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat
 	}
 }
 
-void implicitPoint3D_LPI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const
+inline void implicitPoint3D_LPI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const
 {
 	lambda3d_LPI_bigfloat(P().X(), P().Y(), P().Z(), Q().X(), Q().Y(), Q().Z(), R().X(), R().Y(), R().Z(), S().X(), S().Y(), S().Z(), T().X(), T().Y(), T().Z(), lx, ly, lz, d);
 	if (sgn(d) < 0)
@@ -621,7 +623,7 @@ void implicitPoint3D_LPI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat
 	}
 }
 
-void implicitPoint3D_TPI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const
+inline void implicitPoint3D_TPI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const
 {
 	lambda3d_TPI_bigfloat(V1().X(), V1().Y(), V1().Z(), V2().X(), V2().Y(), V2().Z(), V3().X(), V3().Y(), V3().Z(),
 		W1().X(), W1().Y(), W1().Z(), W2().X(), W2().Y(), W2().Z(), W3().X(), W3().Y(), W3().Z(),
@@ -635,7 +637,7 @@ void implicitPoint3D_TPI::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat
 	}
 }
 
-void implicitPoint3D_LNC::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const
+inline void implicitPoint3D_LNC::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat& lz, bigfloat& d) const
 {
 	lambda3d_LNC_bigfloat(P().X(), P().Y(), P().Z(), Q().X(), Q().Y(), Q().Z(), T(), lx, ly, lz, d);
 	if (sgn(d) < 0)
@@ -648,7 +650,7 @@ void implicitPoint3D_LNC::getBigfloatLambda(bigfloat& lx, bigfloat& ly, bigfloat
 }
 
 
-bool genericPoint::apapExplicit(explicitPoint2D& e) const
+inline bool genericPoint::apapExplicit(explicitPoint2D& e) const
 {
 	double l1x_p[128], * l1x = l1x_p, l1y_p[128], * l1y = l1y_p, d1_p[128], * d1 = d1_p;
 	int l1x_len, l1y_len, d1_len;
@@ -665,7 +667,7 @@ bool genericPoint::apapExplicit(explicitPoint2D& e) const
 	return true;
 }
 
-bool genericPoint::approxExplicit(explicitPoint2D& e) const
+inline bool genericPoint::approxExplicit(explicitPoint2D& e) const
 {
 	double lambda_x, lambda_y, lambda_d, max_var = 0;
 	interval_number ilx, ily, id;
@@ -680,7 +682,7 @@ bool genericPoint::approxExplicit(explicitPoint2D& e) const
 	return true;
 }
 
-bool genericPoint::apapExplicit(explicitPoint3D& e) const
+inline bool genericPoint::apapExplicit(explicitPoint3D& e) const
 {
 	double l1z_p[128], * l1z = l1z_p, l1x_p[128], * l1x = l1x_p, l1y_p[128], * l1y = l1y_p, d1_p[128], * d1 = d1_p;
 	int l1z_len, l1x_len, l1y_len, d1_len;
@@ -699,7 +701,7 @@ bool genericPoint::apapExplicit(explicitPoint3D& e) const
 }
 
 
-bool genericPoint::approxExplicit(explicitPoint3D& e) const
+inline bool genericPoint::approxExplicit(explicitPoint3D& e) const
 {
 	double lambda_x, lambda_y, lambda_z, lambda_d, max_var = 0;
 		interval_number ilx, ily, ilz, id;
@@ -716,7 +718,7 @@ bool genericPoint::approxExplicit(explicitPoint3D& e) const
 }
 
 
-bool genericPoint::getApproxXYCoordinates(double& x, double& y, bool apap) const
+inline bool genericPoint::getApproxXYCoordinates(double& x, double& y, bool apap) const
 {
 	if (is2D())
 	{
@@ -782,7 +784,7 @@ bool genericPoint::getApproxXYCoordinates(double& x, double& y, bool apap) const
 	return false;
 }
 
-bool genericPoint::getApproxXYZCoordinates(double& x, double& y, double& z, bool apap) const
+inline bool genericPoint::getApproxXYZCoordinates(double& x, double& y, double& z, bool apap) const
 {
 	if (is3D())
 	{
@@ -829,14 +831,14 @@ bool genericPoint::getApproxXYZCoordinates(double& x, double& y, double& z, bool
 	return false;
 }
 
-bool genericPoint::getExactXYCoordinates(bigrational& x, bigrational& y) const
+inline bool genericPoint::getExactXYCoordinates(bigrational& x, bigrational& y) const
 {
 	if (isExplicit2D()) return toExplicit2D().getExactXYCoordinates(x, y);
 	else if (isSSI()) return toSSI().getExactXYCoordinates(x, y);
 	else ip_error("genericPoint::getExactXYCoordinates - should not happen\n");
 }
 
-bool genericPoint::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
+inline bool genericPoint::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
 {
 	if (isExplicit3D()) return toExplicit3D().getExactXYZCoordinates(x, y, z);
 	else if (isLPI()) return toLPI().getExactXYZCoordinates(x, y, z);
@@ -847,7 +849,7 @@ bool genericPoint::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrat
 	else ip_error("genericPoint::getExactXYZCoordinates - should not happen\n");
 }
 
-bool implicitPoint2D_SSI::getExactXYCoordinates(bigrational& x, bigrational& y) const
+inline bool implicitPoint2D_SSI::getExactXYCoordinates(bigrational& x, bigrational& y) const
 {
 	bigfloat lx, ly, d;
 	getBigfloatLambda(lx, ly, d);
@@ -858,7 +860,7 @@ bool implicitPoint2D_SSI::getExactXYCoordinates(bigrational& x, bigrational& y) 
 	return true;
 }
 
-bool implicitPoint3D_LPI::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
+inline bool implicitPoint3D_LPI::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
 {
 	bigfloat lx, ly, lz, d;
 	getBigfloatLambda(lx, ly, lz, d);
@@ -870,7 +872,7 @@ bool implicitPoint3D_LPI::getExactXYZCoordinates(bigrational& x, bigrational& y,
 	return true;
 }
 
-bool implicitPoint3D_TPI::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
+inline bool implicitPoint3D_TPI::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
 {
 	bigfloat lx, ly, lz, d;
 	getBigfloatLambda(lx, ly, lz, d);
@@ -882,7 +884,7 @@ bool implicitPoint3D_TPI::getExactXYZCoordinates(bigrational& x, bigrational& y,
 	return true;
 }
 
-bool implicitPoint3D_LNC::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
+inline bool implicitPoint3D_LNC::getExactXYZCoordinates(bigrational& x, bigrational& y, bigrational& z) const
 {
 	bigfloat lx, ly, lz, d;
 	getBigfloatLambda(lx, ly, lz, d);
@@ -894,7 +896,7 @@ bool implicitPoint3D_LNC::getExactXYZCoordinates(bigrational& x, bigrational& y,
 	return true;
 }
 
-ostream& operator<<(ostream& os, const genericPoint& p)
+inline ostream& operator<<(ostream& os, const genericPoint& p)
 {
 	if (p.isExplicit2D()) return os << p.toExplicit2D();
 	else if (p.isExplicit3D()) return os << p.toExplicit3D();
@@ -906,7 +908,7 @@ ostream& operator<<(ostream& os, const genericPoint& p)
 	return os;
 }
 
-int maxComponentInTriangleNormal_filtered(double ov1x, double ov1y, double ov1z, double ov2x, double ov2y, double ov2z, double ov3x, double ov3y, double ov3z)
+inline int maxComponentInTriangleNormal_filtered(double ov1x, double ov1y, double ov1z, double ov2x, double ov2y, double ov2z, double ov3x, double ov3y, double ov3z)
 {
 	double v3x = ov3x - ov2x;
 	double v3y = ov3y - ov2y;
@@ -949,7 +951,7 @@ int maxComponentInTriangleNormal_filtered(double ov1x, double ov1y, double ov1z,
 	return -1;
 }
 
-int maxComponentInTriangleNormal_exact(double ov1x, double ov1y, double ov1z, double ov2x, double ov2y, double ov2z, double ov3x, double ov3y, double ov3z)
+inline int maxComponentInTriangleNormal_exact(double ov1x, double ov1y, double ov1z, double ov2x, double ov2y, double ov2z, double ov3x, double ov3y, double ov3z)
 {
 	expansionObject o;
 	double v3x[2];
@@ -993,7 +995,7 @@ int maxComponentInTriangleNormal_exact(double ov1x, double ov1y, double ov1z, do
 	return 1;
 }
 
-int genericPoint::maxComponentInTriangleNormal(double ov1x, double ov1y, double ov1z, double ov2x, double ov2y, double ov2z, double ov3x, double ov3y, double ov3z)
+inline int genericPoint::maxComponentInTriangleNormal(double ov1x, double ov1y, double ov1z, double ov2x, double ov2y, double ov2z, double ov3x, double ov3y, double ov3z)
 {
 	int ret;
 	if ((ret = maxComponentInTriangleNormal_filtered(ov1x, ov1y, ov1z, ov2x, ov2y, ov2z, ov3x, ov3y, ov3z)) >= 0) return ret;
@@ -1007,7 +1009,7 @@ int genericPoint::maxComponentInTriangleNormal(double ov1x, double ov1y, double 
 //
 /////////////////////////////////////////////
 
-bool genericPoint::innerSegmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q)
+inline bool genericPoint::innerSegmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q)
 {
 	int o11, o12, o21, o22;
 
@@ -1032,7 +1034,7 @@ bool genericPoint::innerSegmentsCross(const genericPoint& A, const genericPoint&
 	return false;
 }
 
-bool genericPoint::segmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q)
+inline bool genericPoint::segmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q)
 {
 	int o11, o12, o21, o22;
 
@@ -1057,7 +1059,7 @@ bool genericPoint::segmentsCross(const genericPoint& A, const genericPoint& B, c
 	return false;
 }
 
-bool genericPoint::innerSegmentCrossesInnerTriangle(const genericPoint& s1, const genericPoint& s2, const genericPoint& v1, const genericPoint& v2, const genericPoint& v3)
+inline bool genericPoint::innerSegmentCrossesInnerTriangle(const genericPoint& s1, const genericPoint& s2, const genericPoint& v1, const genericPoint& v2, const genericPoint& v3)
 {
 	int o1 = orient3D(s1, v1, v2, v3); if (o1 == 0) return false;
 	int o2 = orient3D(s2, v1, v2, v3); if (o2 == 0) return false;
@@ -1072,7 +1074,7 @@ bool genericPoint::innerSegmentCrossesInnerTriangle(const genericPoint& s1, cons
 	return true;
 }
 
-bool genericPoint::pointInInnerSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2)
+inline bool genericPoint::pointInInnerSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2)
 {
 	if (misaligned(p, v1, v2)) return false;
 
@@ -1089,7 +1091,7 @@ bool genericPoint::pointInInnerSegment(const genericPoint& p, const genericPoint
 	return false;
 }
 
-bool genericPoint::pointInSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2)
+inline bool genericPoint::pointInSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2)
 {
 	if (misaligned(p, v1, v2)) return false;
 
@@ -1106,7 +1108,7 @@ bool genericPoint::pointInSegment(const genericPoint& p, const genericPoint& v1,
 	return ((lt2x == 0 && lt2y == 0 && lt2z == 0) || (lt3x == 0 && lt3y == 0 && lt3z == 0));
 }
 
-bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C)
+inline bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C)
 {
 	int o1, o2, o3;
 	o1 = orient2Dxy(P, A, B);
@@ -1124,7 +1126,7 @@ bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A,
 }
 
 
-bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C, int& o1, int& o2, int& o3)
+inline bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C, int& o1, int& o2, int& o3)
 {
 	o1 = orient2Dxy(P, A, B);
 	o2 = orient2Dxy(P, B, C);
@@ -1140,7 +1142,7 @@ bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A,
 	return ((o1 >= 0 && o2 >= 0 && o3 >= 0) || (o1 <= 0 && o2 <= 0 && o3 <= 0));
 }
 
-bool genericPoint::pointInInnerTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C)
+inline bool genericPoint::pointInInnerTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C)
 {
 	int o1, o2, o3;
 	o1 = orient2Dxy(P, A, B);
@@ -1160,7 +1162,7 @@ bool genericPoint::pointInInnerTriangle(const genericPoint& P, const genericPoin
 
 
 
-bool genericPoint::pointInInnerSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2, int xyz)
+inline bool genericPoint::pointInInnerSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2, int xyz)
 {
 	int lt2, lt3;
 	if (xyz == 0)
@@ -1193,7 +1195,7 @@ bool genericPoint::pointInInnerSegment(const genericPoint& p, const genericPoint
 	return (lt2 && (lt2 == lt3));
 }
 
-bool genericPoint::pointInSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2, int xyz)
+inline bool genericPoint::pointInSegment(const genericPoint& p, const genericPoint& v1, const genericPoint& v2, int xyz)
 {
 	int lt2, lt3, lt4, lt5;
 	if (xyz == 0)
@@ -1226,7 +1228,7 @@ bool genericPoint::pointInSegment(const genericPoint& p, const genericPoint& v1,
 	return ((lt2 == 0 && lt4 == 0) || (lt3 == 0 && lt5 == 0));
 }
 
-bool genericPoint::pointInInnerTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C, int xyz)
+inline bool genericPoint::pointInInnerTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C, int xyz)
 {
 	int o1, o2, o3;
 	if (xyz == 2)
@@ -1250,7 +1252,7 @@ bool genericPoint::pointInInnerTriangle(const genericPoint& P, const genericPoin
 	return ((o1 > 0 && o2 > 0 && o3 > 0) || (o1 < 0 && o2 < 0 && o3 < 0));
 }
 
-bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C, int xyz)
+inline bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A, const genericPoint& B, const genericPoint& C, int xyz)
 {
 	int o1, o2, o3;
 	if (xyz == 2)
@@ -1274,7 +1276,7 @@ bool genericPoint::pointInTriangle(const genericPoint& P, const genericPoint& A,
 	return ((o1 >= 0 && o2 >= 0 && o3 >= 0) || (o1 <= 0 && o2 <= 0 && o3 <= 0));
 }
 
-bool genericPoint::innerSegmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q, int xyz)
+inline bool genericPoint::innerSegmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q, int xyz)
 {
 	int o11, o12, o21, o22;
 
@@ -1303,7 +1305,7 @@ bool genericPoint::innerSegmentsCross(const genericPoint& A, const genericPoint&
 	return ((o11 || o21 || o12 || o22) && o11 == o12 && o21 == o22);
 }
 
-bool genericPoint::segmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q, int xyz)
+inline bool genericPoint::segmentsCross(const genericPoint& A, const genericPoint& B, const genericPoint& P, const genericPoint& Q, int xyz)
 {
 	int o11, o12, o21, o22;
 

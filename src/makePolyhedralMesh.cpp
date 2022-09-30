@@ -624,7 +624,7 @@ BSPcomplex* makePolyhedralMesh(
 
 BSPcomplex* remakePolyhedralMesh(
     const double* coords_A, uint32_t npts_A, const uint32_t* tri_idx_A, uint32_t ntri_A,
-    const double* coords_B, uint32_t npts_B, const uint32_t* tet_idx_B, uint32_t ntet_B, bool verbose)
+    const double* coords_B, uint32_t npts_B, const uint32_t* tet_idx_B, uint32_t ntet_B, bool verbose, bool no_class)
 {
     if (verbose) printf("\nEmbed trimesh into tetmesh.\n\n");
 
@@ -666,7 +666,32 @@ BSPcomplex* remakePolyhedralMesh(
     }
 
     // Here we may still have unused vertices (copies of coincident vertices that do not belong to tets)
-    // Should clean...
+    // Should clean... here below a sketch of the algorithm
+
+    //uint32_t offset = 0;
+    //std::vector<uint32_t> map;
+    //map.resize(mesh->num_vertices);
+    //for (uint32_t i = 0; i < mesh->num_vertices; i++) map[i] = i;
+
+    //for (uint32_t i = 0; i < mesh->num_vertices; i++) {
+    //    vertex_t& v = mesh->vertices[i];
+    //    map[i] -= offset;
+    //    if (v.original_index != i) {
+    //        v.original_index = UINT32_MAX;
+    //        offset++;
+    //    }
+    //}
+
+
+    // 0) Init 'offset' to zero
+    // 1) Create another vector<uint32_t> 'map' as large as mesh->vertices and init it with increasing indexes
+    // 2) for each vertex v = vertices[i], decrease map[i] by offset
+    //    Check whether 'v's original index corresponds to its position i.
+    //    if not (the vertex must be eventually deleted): 
+    //      set original_index to UINT32_MAX
+    //      increase 'offset'
+    // 3) std::erase all vertices having original_index == UINT32_MAX
+    // 4) replace each connstraints->tri_vertices[i] with map[constraints->tri_vertices[i]]
 
     clock_t time0 = clock();
     clock_t time2 = time0;
@@ -793,24 +818,18 @@ BSPcomplex* remakePolyhedralMesh(
     if (verbose) printf("\tFind black faces %f s\n", (double)(time7 - time6) / CLOCKS_PER_SEC);
 
     //-Classification:intrenal/external cells-------------------------------------
-    complex.constraintsSurface_complexPartition(false);
+    if (!no_class) {
+        complex.constraintsSurface_complexPartition(false);
 
-    clock_t time8 = clock();
-    if (verbose) printf("\tInt-ext class. %f s\n", (double)(time8 - time7) / CLOCKS_PER_SEC);
-
+        clock_t time8 = clock();
+        if (verbose) printf("\tInt-ext class. %f s\n", (double)(time8 - time7) / CLOCKS_PER_SEC);
+    }
 
     clock_t time9 = clock();
     double BSP_time = (double)(time9 - time4) / CLOCKS_PER_SEC;
     if (verbose) printf("TOTAL BSP: %f s\n\n", BSP_time);
     if (verbose) printf("TOTAL time: %f s\n\n", BSP_time + DEL_time);
     if (verbose) PrintMemoryInfo();
-
-    //uint32_t npts, ntri, * tri_idx;
-    //double* coord;
-    //complex.extractSkinTriMesh("input4.wrl", bool_opcode, &coord, &npts, &tri_idx, &ntri);
-    //saveVRML("input4.wrl", coord, npts, tri_idx, ntri, false);
-    //saveVRML("input5.wrl", coord, npts, tri_idx, ntri, true);
-    //exit(0);
 
     return complex_p;
 }

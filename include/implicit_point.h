@@ -31,9 +31,6 @@
 #include "numerics.h"
 #include <iostream>
 
-// Always call this (once per thread) before using indirect predicates
-void initFPU();
-
 // An indirect predicate can assume one of the following values.
 // UNDEFINED means that input parameters are degenerate and do not define an
 // implicit point.
@@ -44,8 +41,8 @@ enum IP_Sign {
 	UNDEFINED = 2
 };
 
-// A filtered indirect predicate can assume one of the following values.
-// UNCERTAIN means that precision is not enough to reach a conclusion.
+// A filtered indirect predicate can assume an UNCERTAIN value.
+// This means that precision is not enough to reach a conclusion.
 enum Filtered_Sign {
 	UNCERTAIN = 0
 };
@@ -67,17 +64,17 @@ protected:
 	Point_Type type;
 
 public:
-	inline genericPoint(const Point_Type& t) : type(t) {}
+	genericPoint(const Point_Type& t) : type(t) {}
 
-	inline Point_Type getType() const { return type; }
-	inline bool is2D() const { return type <= SSI; }
-	inline bool is3D() const { return type > SSI; }
-	inline bool isExplicit2D() const { return (type == EXPLICIT2D); }
-	inline bool isExplicit3D() const { return (type == EXPLICIT3D); }
-	inline bool isSSI() const { return (type == SSI); }
-	inline bool isLPI() const { return (type == LPI); }
-	inline bool isTPI() const { return (type == TPI); }
-	inline bool isLNC() const { return (type == LNC); }
+	Point_Type getType() const { return type; }
+	bool is2D() const { return type <= SSI; }
+	bool is3D() const { return type > SSI; }
+	bool isExplicit2D() const { return (type == EXPLICIT2D); }
+	bool isExplicit3D() const { return (type == EXPLICIT3D); }
+	bool isSSI() const { return (type == SSI); }
+	bool isLPI() const { return (type == LPI); }
+	bool isTPI() const { return (type == TPI); }
+	bool isLNC() const { return (type == LNC); }
 
 	// The following functions convert to explicit points.
 	// Use only after having verified the correct type through getType()
@@ -90,19 +87,19 @@ public:
 	// but if you experience strange behaviour you may try replacing the type casts
 	// with memcpy to an object and hope that the optimizer recognizes that an actual
 	// copy is not necessary.
-	inline class explicitPoint2D& toExplicit2D() { return (explicitPoint2D&)(*this); }
-	inline class implicitPoint2D_SSI& toSSI() { return (implicitPoint2D_SSI&)(*this); }
-	inline class explicitPoint3D& toExplicit3D() { return (explicitPoint3D&)(*this); }
-	inline class implicitPoint3D_LPI& toLPI() { return (implicitPoint3D_LPI&)(*this); }
-	inline class implicitPoint3D_TPI& toTPI() { return (implicitPoint3D_TPI&)(*this); }
-	inline class implicitPoint3D_LNC& toLNC() { return (implicitPoint3D_LNC&)(*this); }
+	class explicitPoint2D& toExplicit2D() { return (explicitPoint2D&)(*this); }
+	class implicitPoint2D_SSI& toSSI() { return (implicitPoint2D_SSI&)(*this); }
+	class explicitPoint3D& toExplicit3D() { return (explicitPoint3D&)(*this); }
+	class implicitPoint3D_LPI& toLPI() { return (implicitPoint3D_LPI&)(*this); }
+	class implicitPoint3D_TPI& toTPI() { return (implicitPoint3D_TPI&)(*this); }
+	class implicitPoint3D_LNC& toLNC() { return (implicitPoint3D_LNC&)(*this); }
 
-	inline const class explicitPoint2D& toExplicit2D() const { return (explicitPoint2D&)(*this); }
-	inline const class implicitPoint2D_SSI& toSSI() const { return (implicitPoint2D_SSI&)(*this); }
-	inline const class explicitPoint3D& toExplicit3D() const { return (explicitPoint3D&)(*this); }
-	inline const class implicitPoint3D_LPI& toLPI() const { return (implicitPoint3D_LPI&)(*this); }
-	inline const class implicitPoint3D_TPI& toTPI() const { return (implicitPoint3D_TPI&)(*this); }
-	inline const class implicitPoint3D_LNC& toLNC() const { return (implicitPoint3D_LNC&)(*this); }
+	const class explicitPoint2D& toExplicit2D() const { return (explicitPoint2D&)(*this); }
+	const class implicitPoint2D_SSI& toSSI() const { return (implicitPoint2D_SSI&)(*this); }
+	const class explicitPoint3D& toExplicit3D() const { return (explicitPoint3D&)(*this); }
+	const class implicitPoint3D_LPI& toLPI() const { return (implicitPoint3D_LPI&)(*this); }
+	const class implicitPoint3D_TPI& toTPI() const { return (implicitPoint3D_TPI&)(*this); }
+	const class implicitPoint3D_LNC& toLNC() const { return (implicitPoint3D_LNC&)(*this); }
 
 	// Calculates the first two cartesian coordinates. If the point is implicit, these
 	// coordinates are approximated due to floating point roundoff.
@@ -126,7 +123,10 @@ public:
 		return x.get_dec_str() + " " + y.get_dec_str() + " " + z.get_dec_str();
 	}
 
-	// These are the indirect predicates supported up to now
+	// These are the indirect predicates supported up to now.
+	// In each predicate, it is assumed that input points are either all 2D or all 3D
+	// as expected. No check is performed. Passing wrong implicit points may result in
+	// unpredictable behaviour.
 
 	// Orient2D - fully supported
 	// Input points can be any combination of 2D points.
@@ -273,19 +273,19 @@ class explicitPoint2D : public genericPoint {
 	double x, y;
 
 public:
-	inline explicitPoint2D() : genericPoint(Point_Type::EXPLICIT2D) {}
-	inline explicitPoint2D(double _x, double _y) : genericPoint(Point_Type::EXPLICIT2D), x(_x), y(_y) {}
-	inline explicitPoint2D(const explicitPoint2D& b) : genericPoint(Point_Type::EXPLICIT2D), x(b.x), y(b.y) {}
+	explicitPoint2D() : genericPoint(Point_Type::EXPLICIT2D) {}
+	explicitPoint2D(double _x, double _y) : genericPoint(Point_Type::EXPLICIT2D), x(_x), y(_y) {}
+	explicitPoint2D(const explicitPoint2D& b) : genericPoint(Point_Type::EXPLICIT2D), x(b.x), y(b.y) {}
 
-	inline void operator=(const explicitPoint2D& b) { type = Point_Type::EXPLICIT2D; x = b.x; y = b.y; }
-	inline void set(double a, double b) { x = a; y = b; }
+	void operator=(const explicitPoint2D& b) { type = Point_Type::EXPLICIT2D; x = b.x; y = b.y; }
+	void set(double a, double b) { x = a; y = b; }
 
-	inline double X() const { return x; }
-	inline double Y() const { return y; }
+	double X() const { return x; }
+	double Y() const { return y; }
 
-	inline const double* ptr() const { return &x; }
+	const double* ptr() const { return &x; }
 
-	inline bool getExactXYCoordinates(bigrational& _x, bigrational& _y) const { _x = bigfloat(x); _y = bigfloat(y); return true; }
+	bool getExactXYCoordinates(bigrational& _x, bigrational& _y) const { _x = bigfloat(x); _y = bigfloat(y); return true; }
 };
 
 
@@ -300,14 +300,14 @@ public:
 		, dfilter_denominator(NAN)
 	{}
 
-	inline const explicitPoint2D& L1_1() const { return l1_1; }
-	inline const explicitPoint2D& L1_2() const { return l1_2; }
-	inline const explicitPoint2D& L2_1() const { return l2_1; }
-	inline const explicitPoint2D& L2_2() const { return l2_2; }
+	const explicitPoint2D& L1_1() const { return l1_1; }
+	const explicitPoint2D& L1_2() const { return l1_2; }
+	const explicitPoint2D& L2_1() const { return l2_1; }
+	const explicitPoint2D& L2_2() const { return l2_2; }
 
 private: // Cached values
 	mutable interval_number dfilter_lambda_x, dfilter_lambda_y, dfilter_denominator;
-	inline bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
+	bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
 
 public:
 	bool getIntervalLambda(interval_number& lx, interval_number& ly, interval_number &d) const;
@@ -327,18 +327,18 @@ class explicitPoint3D : public genericPoint {
 	double x, y, z;
 
 public:
-	inline explicitPoint3D() : genericPoint(Point_Type::EXPLICIT3D) {}
-	inline explicitPoint3D(double _x, double _y, double _z) : genericPoint(Point_Type::EXPLICIT3D), x(_x), y(_y), z(_z) {}
-	inline explicitPoint3D(const explicitPoint3D& b) : genericPoint(Point_Type::EXPLICIT3D), x(b.x), y(b.y), z(b.z) {}
+	explicitPoint3D() : genericPoint(Point_Type::EXPLICIT3D) {}
+	explicitPoint3D(double _x, double _y, double _z) : genericPoint(Point_Type::EXPLICIT3D), x(_x), y(_y), z(_z) {}
+	explicitPoint3D(const explicitPoint3D& b) : genericPoint(Point_Type::EXPLICIT3D), x(b.x), y(b.y), z(b.z) {}
 
-	inline void operator=(const explicitPoint3D& b) { type = Point_Type::EXPLICIT3D; x = b.x; y = b.y; z = b.z; }
-	inline void set(double a, double b, double c) { x = a; y = b; z = c; }
+	void operator=(const explicitPoint3D& b) { type = Point_Type::EXPLICIT3D; x = b.x; y = b.y; z = b.z; }
+	void set(double a, double b, double c) { x = a; y = b; z = c; }
 
-	inline double X() const { return x; }
-	inline double Y() const { return y; }
-	inline double Z() const { return z; }
+	double X() const { return x; }
+	double Y() const { return y; }
+	double Z() const { return z; }
 
-	inline const double* ptr() const { return &x; }
+	const double* ptr() const { return &x; }
 
 	bool getExactXYZCoordinates(bigrational& _x, bigrational& _y, bigrational& _z) const { _x = bigfloat(x); _y = bigfloat(y); _z = bigfloat(z); return true; }
 };
@@ -355,15 +355,15 @@ public:
 		, dfilter_denominator(NAN)
 	{}
 
-	inline const explicitPoint3D& P() const { return ip; }
-	inline const explicitPoint3D& Q() const { return iq; }
-	inline const explicitPoint3D& R() const { return ir; }
-	inline const explicitPoint3D& S() const { return is; }
-	inline const explicitPoint3D& T() const { return it; }
+	const explicitPoint3D& P() const { return ip; }
+	const explicitPoint3D& Q() const { return iq; }
+	const explicitPoint3D& R() const { return ir; }
+	const explicitPoint3D& S() const { return is; }
+	const explicitPoint3D& T() const { return it; }
 
 private: // Cached values
 	mutable interval_number dfilter_lambda_x, dfilter_lambda_y, dfilter_lambda_z, dfilter_denominator;
-	inline bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
+	bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
 
 public:
 	bool getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number &d) const;
@@ -387,19 +387,19 @@ public:
 		, dfilter_denominator(NAN)
 	{}
 
-	inline const explicitPoint3D& V1() const { return iv1; }
-	inline const explicitPoint3D& V2() const { return iv2; }
-	inline const explicitPoint3D& V3() const { return iv3; }
-	inline const explicitPoint3D& W1() const { return iw1; }
-	inline const explicitPoint3D& W2() const { return iw2; }
-	inline const explicitPoint3D& W3() const { return iw3; }
-	inline const explicitPoint3D& U1() const { return iu1; }
-	inline const explicitPoint3D& U2() const { return iu2; }
-	inline const explicitPoint3D& U3() const { return iu3; }
+	const explicitPoint3D& V1() const { return iv1; }
+	const explicitPoint3D& V2() const { return iv2; }
+	const explicitPoint3D& V3() const { return iv3; }
+	const explicitPoint3D& W1() const { return iw1; }
+	const explicitPoint3D& W2() const { return iw2; }
+	const explicitPoint3D& W3() const { return iw3; }
+	const explicitPoint3D& U1() const { return iu1; }
+	const explicitPoint3D& U2() const { return iu2; }
+	const explicitPoint3D& U3() const { return iu3; }
 
 private: // Cached values
 	mutable interval_number dfilter_lambda_x, dfilter_lambda_y, dfilter_lambda_z, dfilter_denominator;
-	inline bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
+	bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
 
 public:
 	bool getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number &d) const;
@@ -421,13 +421,13 @@ public:
 		, dfilter_denominator(NAN)
 	{}
 
-	inline const explicitPoint3D& P() const { return ip; }
-	inline const explicitPoint3D& Q() const { return iq; }
-	inline const double T() const { return t; }
+	const explicitPoint3D& P() const { return ip; }
+	const explicitPoint3D& Q() const { return iq; }
+	const double T() const { return t; }
 
 private: // Cached values
 	mutable interval_number dfilter_lambda_x, dfilter_lambda_y, dfilter_lambda_z, dfilter_denominator;
-	inline bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
+	bool needsIntervalLambda() const { return (dfilter_denominator.isNAN()); } // TRUE if NAN
 
 public:
 	bool getIntervalLambda(interval_number& lx, interval_number& ly, interval_number& lz, interval_number& d) const;
@@ -484,5 +484,8 @@ inline ostream& operator<<(ostream& os, const implicitPoint3D_LNC& p)
 	if (p.apapExplicit(e)) return os << e;
 	else return os << "UNDEF_LNC";
 }
+
+#include "hand_optimized_predicates.hpp"
+#include "implicit_point.hpp"
 
 #endif // IMPLICIT_POINT_H

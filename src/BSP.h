@@ -357,6 +357,7 @@ BSPcomplex* makePolyhedralMesh(
 
 /// <summary>
 /// Same as above, but file B represents a tetrahedral mesh where A will be embedded
+/// 'no_class' means that the interio/exterior cell classification is skipped.
 /// </summary>
 /// <param name="fileA_name"></param>
 /// <param name="coords_A"></param>
@@ -369,6 +370,6 @@ BSPcomplex* makePolyhedralMesh(
 /// <returns></returns>
 BSPcomplex* remakePolyhedralMesh(
     const double* coords_A, uint32_t npts_A, const uint32_t* tri_idx_A, uint32_t ntri_A,
-    const double* coords_B, uint32_t npts_B, const uint32_t* tet_idx_B, uint32_t ntet_B, bool verbose);
+    const double* coords_B, uint32_t npts_B, const uint32_t* tet_idx_B, uint32_t ntet_B, bool verbose, bool no_class =false);
 
 #endif /* BSP_h */
