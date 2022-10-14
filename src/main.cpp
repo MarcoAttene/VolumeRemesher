@@ -137,8 +137,6 @@ void read_MEDIT_file(const char* filename, double** vertices_p, uint32_t* npts,
 /// <returns></returns>
 int main(int argc, char** argv)
 {
-interval_number a(0);
-
 #ifdef NDEBUG
     if (argc < 2) {
         printf("\nUsage: mesh_generator [-v | -l | -s | -b | -t] inputfile_A.off [bool_opcode inputfile_B.off]\n\n"
