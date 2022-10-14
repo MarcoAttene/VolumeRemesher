@@ -41,15 +41,6 @@ void embed_tri_in_poly_mesh(
 	bool verbose
 );
 
-// ADD VECTOR OF BOOLS FOR FACETS THAT BELONG TO THE INPUT SURFACE MESH
-//	Return the mesh as a triplet vertices, facets, cells
-//  With cells being a collection of facet IDs
-//  Then the black facets are a vector of facet IDs
 // 
-// CONSIDER INPUT POINTS AND SEGMENTS
- 
-// Interface with GMP type mpq_class
-#ifdef USE_GMP_INTERFACE
-#include <gmpxx.h>
-inline mpq_class to_gmp_rational(const bigrational& r) { return mpq_class(r.get_dec_str()); }
-#endif
+// TO DO: CONSIDER INPUT POINTS AND SEGMENTS
+
