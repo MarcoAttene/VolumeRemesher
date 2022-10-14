@@ -3,6 +3,7 @@
 #include "extended_predicates.h"
 #include "BSP.h"
 #include "string.h"
+#include <stdarg.h>
 
 #ifdef _MSC_VER
 #include <windows.h>

@@ -33,6 +33,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "numerics.h"
+#include <cstring>
+#include <algorithm>
 
 inline void initFPU()
 {
@@ -1016,9 +1018,7 @@ inline std::string bigfloat::get_str() const {
 	if (sign < 0) s += "-";
 	s += mantissa.get_str();
 	s += " * 2^";
-
-	char es[1024];
-	s += _itoa(exponent, es, 10);
+	s += std::to_string(exponent);
 	return s;
 }
 
