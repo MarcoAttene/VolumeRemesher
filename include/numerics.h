@@ -44,8 +44,6 @@
 #include <iostream>
 #include "memPool.h"
 
-#define USE_GNU_GMP_CLASSES
-
 #ifdef USE_GNU_GMP_CLASSES
 #include <gmpxx.h>
 #endif
@@ -106,8 +104,14 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 
 		static constexpr __m128d zero = { 0, 0 };
 		static constexpr __m128d minus_one = { -1, -1 };
+
+#ifdef _MSC_VER
 		static constexpr __m128i sign_low_mask = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128 };
 		static constexpr __m128i sign_high_mask = { 0, 0, 0, 0, 0, 0, 0, -128, 0, 0, 0, 0, 0, 0, 0, 0 };
+#else
+		static constexpr __m128i sign_low_mask = { 0, -9223372036854775808 };
+		static constexpr __m128i sign_high_mask = { -9223372036854775808, 0 };
+#endif
 
 	public:
 		const double *getInterval() const { return (const double*)&interval; }
@@ -389,6 +393,7 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 	};
 
 #ifdef USE_GNU_GMP_CLASSES
+	typedef mpz_class bignatural;
 	typedef mpq_class bigfloat;
 	typedef mpq_class bigrational;
 #else
