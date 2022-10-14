@@ -117,7 +117,11 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 		const double *getInterval() const { return (const double*)&interval; }
 
 		interval_number() { }
-		interval_number(const double a) : interval(_mm_set_pd(-a, a)) {}
+		interval_number(const double a) : interval(_mm_set_pd(-a, a)) {
+		printf("%lld %lld\n",sign_low_mask[0],sign_low_mask[1]);
+		exit(0);
+		
+		}
 		interval_number(const double minf, const double sup) : interval(_mm_set_pd(minf, sup)) {}
 		interval_number(const __m128d& i) : interval(i) {}
 		interval_number(const interval_number& b) : interval(b.interval) {}
