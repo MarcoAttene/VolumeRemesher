@@ -105,12 +105,12 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 		static constexpr __m128d zero = { 0, 0 };
 		static constexpr __m128d minus_one = { -1, -1 };
 
-#ifdef _MSC_VER
+#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+		static constexpr __m128i sign_low_mask = { 0, LLONG_MIN };
+		static constexpr __m128i sign_high_mask = { LLONG_MIN, 0 };
+#elif defined(_MSC_VER)
 		static constexpr __m128i sign_low_mask = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128 };
 		static constexpr __m128i sign_high_mask = { 0, 0, 0, 0, 0, 0, 0, -128, 0, 0, 0, 0, 0, 0, 0, 0 };
-#else
-		static constexpr __m128i sign_low_mask = { 0, -9223372036854775808 };
-		static constexpr __m128i sign_high_mask = { -9223372036854775808, 0 };
 #endif
 
 	public:
