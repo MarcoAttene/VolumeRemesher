@@ -95,6 +95,7 @@ inline void setFPUModeToRoundNEAR() { fesetround(FE_TONEAREST); }
 
 #ifdef USE_SIMD_INSTRUCTIONS
 #include <emmintrin.h>
+#include <climits>
 #endif
 
 	class interval_number

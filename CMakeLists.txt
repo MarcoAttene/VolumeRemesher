@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
 # use gcc and g++ instead of clang
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-set(CMAKE_CXX_COMPILER "g++-10")
-endif()
+# if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+# set(CMAKE_CXX_COMPILER "g++-10")
+# endif()
 
 # set the project name
 project(mesh_generator)
