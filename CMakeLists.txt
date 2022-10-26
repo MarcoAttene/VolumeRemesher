@@ -71,6 +71,6 @@ if(NOT HAS_PARENT)
     	src/VolumeRemesher/main.cpp
 	)
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_NAME}_lib)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE VOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
+	target_compile_definitions(${PROJECT_NAME} PRIVATE -DVOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
 endif()
 

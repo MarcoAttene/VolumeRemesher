@@ -236,8 +236,10 @@ int main(int argc, char **argv) {
   bool surfmesh = false;
   bool blackfaces = false;
   const std::string ROOT_PATH = VOL_REM_MODELS_PATH;
-  const char *fileA_name = (ROOT_PATH + "/Octocat-v1.off").c_str();
-  const char *fileB_name = (ROOT_PATH + "/Octocat.bg.tet").c_str();
+  const std::string fileA_name_s = ROOT_PATH + "/Octocat-v1.off";
+  const std::string fileB_name_s = ROOT_PATH + "/Octocat-v1.off";
+  const char *fileA_name = fileA_name_s.c_str();
+  const char *fileB_name = fileB_name_s.c_str();
   char bool_opcode = 'U';
   bool two_input = (bool_opcode != '0');
 #endif
