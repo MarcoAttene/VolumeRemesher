@@ -33,6 +33,7 @@
 #define ENDPTS_T pair<uint32_t, uint32_t>
 #define NEW_ENDPTS make_pair(UINT32_MAX, UINT32_MAX)
 
+namespace vol_rem {
 class BSPedge { // The edge of a BSPcell.
 public:
   uint32_t meshVertices[6]; // 2 vertices of the mesh-tet-edge which
@@ -382,3 +383,4 @@ BSPcomplex *remakePolyhedralMesh(const double *coords_A, uint32_t npts_A,
                                  const double *coords_B, uint32_t npts_B,
                                  const uint32_t *tet_idx_B, uint32_t ntet_B,
                                  bool verbose, bool no_class = false);
+} // namespace vol_rem

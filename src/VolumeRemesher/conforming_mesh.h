@@ -6,6 +6,8 @@
 #define CONSTR_A 0
 #define CONSTR_B 1
 
+namespace vol_rem {
+
 // half-edges struct
 struct half_edge_t {
   uint32_t endpts[2]; // endpoints of a constraint(triangle) edge,
@@ -42,3 +44,4 @@ uint32_t place_virtual_constraints(TetMesh *mesh, constraints_t *constraints,
 void insert_constraints(TetMesh *, constraints_t *, uint32_t *, uint32_t **,
                         uint32_t *, uint32_t **, uint32_t *, uint32_t **,
                         uint32_t *, uint32_t **, uint32_t *, uint32_t **);
+} // namespace vol_rem

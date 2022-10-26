@@ -40,6 +40,7 @@
 //
 // alloc is almost always O(1) [O(num_blocks) only if growth is required]
 // release is always O(1)
+namespace vol_rem {
 
 class N_memory_pool {
   std::vector<uint8_t *>
@@ -257,3 +258,4 @@ public:
     }
   }
 };
+} // namespace vol_rem

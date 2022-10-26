@@ -3,6 +3,7 @@
 #include "BSP.h"
 #include <vector>
 
+namespace vol_rem {
 /// <summary>
 /// embed_tri_in_poly_mesh
 /// Takes a set of triangles T and a tetrahedral mesh M.
@@ -49,3 +50,4 @@ void embed_tri_in_poly_mesh(const std::vector<double> &tri_vrt_coords,
 
 //
 // TO DO: CONSIDER INPUT POINTS AND SEGMENTS
+} // namespace vol_rem

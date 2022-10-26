@@ -4,6 +4,7 @@
 
 #include <cstring>
 
+namespace vol_rem {
 int orient2d(double p1x, double p1y, double p2x, double p2y, double p3x,
              double p3y);
 int orient3d(double px, double py, double pz, double qx, double qy, double qz,
@@ -178,3 +179,4 @@ public:
     }
   }
 };
+} // namespace vol_rem

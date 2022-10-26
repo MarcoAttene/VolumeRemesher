@@ -1,5 +1,7 @@
 #include "BSP.h"
 
+using namespace vol_rem;
+
 void read_OFF_file(const char *filename, double **vertices_p, uint32_t *npts,
                    uint32_t **tri_vertices_p, uint32_t *ntri, bool verbose) {
 

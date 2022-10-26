@@ -47,11 +47,12 @@
 #include <gmpxx.h>
 #endif
 
+namespace vol_rem {
 // Call the following function (once per thread) before using these number types
 void initFPU();
 
 inline void ip_error(const char *msg) {
-  fprintf(stderr, msg);
+  fprintf(stderr, "%s", msg);
   exit(0);
 }
 
@@ -254,6 +255,7 @@ public:
 // The square root of an interval
 // Returns NAN if the interval contains a negative value
 inline interval_number sqrt(const interval_number &p) {
+  using std::sqrt;
   const double inf = p.inf();
   const double sup = p.sup();
   if (inf < 0 || sup < 0)
@@ -956,5 +958,5 @@ inline std::ostream &operator<<(std::ostream &os, const bigrational &p) {
   return os;
 }
 #endif // USE_GNU_GMP_CLASSES
-
+} // namespace vol_rem
 #include "numerics.hpp"

@@ -7,6 +7,7 @@
 
 #pragma intrinsic(fabs)
 
+namespace vol_rem {
 //------------------------
 // Basic operations
 //------------------------
@@ -60,3 +61,4 @@ int triangle_intersects_inner_tet(const double *v1, const double *v2,
                                   const double *v3, const double *t1,
                                   const double *t2, const double *t3,
                                   const double *t4);
+} // namespace vol_rem

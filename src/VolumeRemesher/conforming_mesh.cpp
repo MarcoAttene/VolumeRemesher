@@ -22,7 +22,7 @@
 //-------------------------------------
 // Simplexes and Sub-Simplexes vertices
 //-------------------------------------
-
+namespace vol_rem {
 static inline void extract_tetVrts(uint32_t *tet_vrts, uint64_t tet_ind,
                                    const TetMesh *mesh) {
   std::memcpy(tet_vrts, mesh->tet_node + 4 * tet_ind, 4 * sizeof(uint32_t));
@@ -3025,3 +3025,4 @@ void insert_constraints(TetMesh *mesh, constraints_t *constraints,
   free(mark_TetIntersection);
   mark_TetIntersection = NULL;
 }
+} // namespace vol_rem

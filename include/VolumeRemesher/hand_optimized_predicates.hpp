@@ -34,6 +34,8 @@
 
 #pragma intrinsic(fabs)
 
+namespace vol_rem {
+
 inline int orient2d_filtered(double p1x, double p1y, double p2x, double p2y,
                              double p3x, double p3y) {
   double dl = (p2x - p1x) * (p3y - p1y);
@@ -438,3 +440,4 @@ inline int orient3d(double px, double py, double pz, double qx, double qy,
   // if (ret != Filtered_Sign::UNCERTAIN) return ret;
   return orient3d_exact(px, py, pz, qx, qy, qz, rx, ry, rz, sx, sy, sz);
 }
+} // namespace vol_rem

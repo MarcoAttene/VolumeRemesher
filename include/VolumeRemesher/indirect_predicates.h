@@ -33,6 +33,7 @@
 
 #include "implicit_point.h"
 
+namespace vol_rem {
 int incircle(double pax, double pay, double pbx, double pby, double pcx,
              double pcy, double pdx, double pdy);
 int inSphere(double pax, double pay, double paz, double pbx, double pby,
@@ -192,5 +193,6 @@ int orient3d_indirect_IIIE(const genericPoint &p1, const genericPoint &p2,
                            double p4z);
 int orient3d_indirect_IIII(const genericPoint &p1, const genericPoint &p2,
                            const genericPoint &p3, const genericPoint &p4);
+} // namespace vol_rem
 
 #include "indirect_predicates.hpp"

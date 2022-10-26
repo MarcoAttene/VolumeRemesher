@@ -39,6 +39,7 @@
 #include <cstring>
 #include <string>
 
+namespace vol_rem {
 inline void initFPU() {
 #ifdef IS64BITPLATFORM
 #ifdef USE_SIMD_INSTRUCTIONS
@@ -1347,3 +1348,4 @@ inline std::string bigrational::get_str() const {
 }
 
 #endif // USE_GNU_GMP_CLASSES
+} // namespace vol_rem

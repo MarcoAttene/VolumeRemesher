@@ -37,7 +37,7 @@
 
 // Uncomment the following to activate overflow/underflow checks
 #define CHECK_FOR_XYZERFLOWS
-
+namespace vol_rem {
 inline int incircle_filtered(double pax, double pay, double pbx, double pby,
                              double pcx, double pcy, double pdx, double pdy) {
   const double adx = pax - pdx;
@@ -11769,3 +11769,4 @@ inline int orient3d_indirect_IIII(const genericPoint &p1,
     return ret;
   return orient3d_indirect_IIII_exact(p1, p2, p3, p4);
 }
+} // namespace vol_rem

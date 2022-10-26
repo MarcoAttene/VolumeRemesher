@@ -2,7 +2,7 @@
 #include "BSP.h"
 
 #include <vector>
-
+namespace vol_rem {
 void embed_tri_in_poly_mesh(const std::vector<double> &tri_vrt_coords,
                             const std::vector<uint32_t> &triangle_indexes,
                             const std::vector<double> &tet_vrt_coords,
@@ -57,3 +57,4 @@ void embed_tri_in_poly_mesh(const std::vector<double> &tri_vrt_coords,
   if (verbose)
     printf("Done\n");
 }
+} // namespace vol_rem

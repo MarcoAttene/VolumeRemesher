@@ -31,6 +31,8 @@
 #include "implicit_point.h"
 #include "indirect_predicates.h"
 
+namespace vol_rem {
+
 int orient2d(double p1x, double p1y, double p2x, double p2y, double p3x,
              double p3y);
 int orient3d(double px, double py, double pz, double qx, double qy, double qz,
@@ -426,7 +428,7 @@ inline int genericPoint::inSphere(const genericPoint &a, const genericPoint &b,
                            e.isExplicit3D();
 
   if (num_explicit == 5)
-    return ::inSphere(
+    return vol_rem::inSphere(
         a.toExplicit3D().X(), a.toExplicit3D().Y(), a.toExplicit3D().Z(),
         b.toExplicit3D().X(), b.toExplicit3D().Y(), b.toExplicit3D().Z(),
         c.toExplicit3D().X(), c.toExplicit3D().Y(), c.toExplicit3D().Z(),
@@ -1659,3 +1661,4 @@ inline bool genericPoint::segmentsCross(const genericPoint &A,
 
   return ((o11 || o12) && (o11 * o12 >= 0) && (o21 || o22) && (o21 * o22 >= 0));
 }
+} // namespace vol_rem
