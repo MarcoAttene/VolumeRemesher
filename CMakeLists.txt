@@ -28,12 +28,12 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# use intrinsic functions
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/Oi")
 	# reserve enough stack size
-	target_link_options(${PROJECT_NAME}_lib PUBLIC "/STACK:8421376")
+	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/STACK:8421376")
 	# turn off annoying warnings
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/D _CRT_SECURE_NO_WARNINGS")
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/D _CRT_NONSTDC_NO_WARNINGS")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "/D _CRT_SECURE_NO_WARNINGS")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "/D _CRT_NONSTDC_NO_WARNINGS")
 	# workaround for known bug in C++17 on MSVC
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/D _HAS_STD_BYTE=0")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "/D _HAS_STD_BYTE=0")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	# set standard optimization level
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -O2)
