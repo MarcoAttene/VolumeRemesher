@@ -30,10 +30,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# reserve enough stack size
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/STACK:8421376")
 	# turn off annoying warnings
-	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "/D _CRT_SECURE_NO_WARNINGS")
-	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "/D _CRT_NONSTDC_NO_WARNINGS")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_CRT_SECURE_NO_WARNINGS")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_CRT_NONSTDC_NO_WARNINGS")
 	# workaround for known bug in C++17 on MSVC
-	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "/D _HAS_STD_BYTE=0")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_HAS_STD_BYTE=0")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	# set standard optimization level
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -O2)
@@ -71,6 +71,6 @@ if(NOT HAS_PARENT)
     	src/VolumeRemesher/main.cpp
 	)
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_NAME}_lib)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE -DVOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
+	target_compile_definitions(${PROJECT_NAME} PRIVATE VOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
 endif()
 

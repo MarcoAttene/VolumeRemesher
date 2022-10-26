@@ -255,13 +255,12 @@ public:
 // The square root of an interval
 // Returns NAN if the interval contains a negative value
 inline interval_number sqrt(const interval_number &p) {
-  using std::sqrt;
   const double inf = p.inf();
   const double sup = p.sup();
   if (inf < 0 || sup < 0)
     return interval_number(NAN);
-  const double srinf = sqrt(inf);
-  const double srsup = sqrt(sup);
+  const double srinf = std::sqrt(inf);
+  const double srsup = std::sqrt(sup);
   if (srinf * srinf > inf)
     return (-nextafter(srinf, 0), srsup);
   else
