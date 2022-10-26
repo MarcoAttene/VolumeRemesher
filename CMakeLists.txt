@@ -54,10 +54,10 @@ include(gmp)
 
 # Public include directory
 target_include_directories(${PROJECT_NAME}_lib PUBLIC
-	src
-	include
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/src
 )
-target_link_directories(${PROJECT_NAME}_lib PUBLIC gmp::gmp)
+target_link_libraries(${PROJECT_NAME}_lib PUBLIC gmp::gmp)
 target_compile_features(${PROJECT_NAME}_lib PUBLIC cxx_std_17)
 
 
@@ -70,6 +70,7 @@ if(NOT HAS_PARENT)
 	add_executable(${PROJECT_NAME}
     	src/VolumeRemesher/main.cpp
 	)
-	target_link_directories(${PROJECT_NAME} PUBLIC VolumeRemesher::VolumeRemesher)
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_NAME}_lib)
+	target_compile_definitions(${PROJECT_NAME} PRIVATE VOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
 endif()
 

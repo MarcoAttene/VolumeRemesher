@@ -1,7 +1,7 @@
-#ifndef _DELAUNAY_
-#define _DELAUNAY_
+#pragma once
 
 #include <VolumeRemesher/implicit_point.h>
+
 #include <cstring>
 
 int orient2d(double p1x, double p1y, double p2x, double p2y, double p3x,
@@ -178,5 +178,3 @@ public:
     }
   }
 };
-
-#endif // _DELAUNAY_

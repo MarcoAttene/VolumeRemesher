@@ -1,3 +1,5 @@
+#pragma once
+
 #include "BSP.h"
 #include <vector>
 
