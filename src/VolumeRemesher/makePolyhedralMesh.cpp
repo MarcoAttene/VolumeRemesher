@@ -7,8 +7,8 @@
 
 namespace vol_rem {
 #ifdef _MSC_VER
-#include <psapi.h>
 #include <windows.h>
+#include <psapi.h>
 
 // To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS
 // and compile with -DPSAPI_VERSION=1
