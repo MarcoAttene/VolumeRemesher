@@ -43,14 +43,11 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -frounding-math)
 	# reserve enough stack size
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -Wl,-z,stacksize=8421376)
-
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	#Disable all optimizations
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -O0)
 	# reserve enough stack size
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -Wl,-z,stacksize=8421376)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 endif()
 
 
