@@ -28,7 +28,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# use intrinsic functions
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/Oi")
 	# reserve enough stack size
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/STACK:8421376")
+	# target_compile_options(${PROJECT_NAME}_lib PUBLIC "/STACK:8421376")
+	set_target_properties(${PROJECT_NAME}_lib PROPERTIES LINK_FLAGS --STACK,8421376)
+
 	# turn off annoying warnings
 	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_CRT_SECURE_NO_WARNINGS")
 	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_CRT_NONSTDC_NO_WARNINGS")
@@ -41,11 +43,14 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -frounding-math)
 	# reserve enough stack size
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -Wl,-z,stacksize=8421376)
+
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	#Disable all optimizations
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -O0)
 	# reserve enough stack size
 	target_compile_options(${PROJECT_NAME}_lib PUBLIC -Wl,-z,stacksize=8421376)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 endif()
 
 
@@ -70,7 +75,7 @@ if(NOT HAS_PARENT)
 	add_executable(${PROJECT_NAME}
     	src/VolumeRemesher/main.cpp
 	)
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_NAME}_lib)
+	target_link_libraries(${PROJECT_NAME} PUBLIC VolumeRemesher::VolumeRemesher)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE VOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
 endif()
 
