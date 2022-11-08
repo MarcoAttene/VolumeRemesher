@@ -76,4 +76,4 @@ if(NOT HAS_PARENT)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE VOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
 endif()
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC USE_GNU_GMP_CLASSES)
+target_compile_definitions(${PROJECT_NAME}_lib PUBLIC USE_GNU_GMP_CLASSES)
