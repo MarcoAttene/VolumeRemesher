@@ -16,6 +16,7 @@ set (SOURCES
 )
 
 try_compile(HAS_SIMD_INSTRUCTIONS ${CMAKE_BINARY_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_simd.cpp")
+try_compile(HAS_GMPXX ${CMAKE_BINARY_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_gmpxx.cpp")
 
 # make a static library for use within external programs
 add_library(${PROJECT_NAME}_lib
@@ -82,4 +83,8 @@ if(NOT HAS_PARENT)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE VOL_REM_MODELS_PATH=\"${CMAKE_SOURCE_DIR}/models\")
 endif()
 
-target_compile_definitions(${PROJECT_NAME}_lib PUBLIC USE_GNU_GMP_CLASSES)
+if(${HAS_GMPXX})
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC USE_GNU_GMP_CLASSES)
+else()
+	MESSAGE(WARNING "No gmpxx supported")
+endif()
