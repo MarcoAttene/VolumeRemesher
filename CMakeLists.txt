@@ -15,39 +15,45 @@ set (SOURCES
     src/VolumeRemesher/inOutPartition.cpp
 )
 
-
+try_compile(HAS_SIMD_INSTRUCTIONS ${CMAKE_BINARY_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_simd.cpp")
 
 # make a static library for use within external programs
 add_library(${PROJECT_NAME}_lib
     ${SOURCES}
 )
 
+
+if(NOT ${HAS_SIMD_INSTRUCTIONS})
+	MESSAGE(WARNING "No simd supported")
+	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC VR_DISABLE_SIMD)
+endif()
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	# grant IEEE 754 compliance
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/fp:strict")
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE "/fp:strict")
 	# use intrinsic functions
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC "/Oi")
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE "/Oi")
 	# reserve enough stack size
-	# target_compile_options(${PROJECT_NAME}_lib PUBLIC "/STACK:8421376")
+	# target_compile_options(${PROJECT_NAME}_lib PRIVATE "/STACK:8421376")
 	set_target_properties(${PROJECT_NAME}_lib PROPERTIES LINK_FLAGS --STACK,8421376)
 
 	# turn off annoying warnings
-	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_CRT_SECURE_NO_WARNINGS")
-	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_CRT_NONSTDC_NO_WARNINGS")
+	target_compile_definitions(${PROJECT_NAME}_lib PRIVATE "_CRT_SECURE_NO_WARNINGS")
+	target_compile_definitions(${PROJECT_NAME}_lib PRIVATE "_CRT_NONSTDC_NO_WARNINGS")
 	# workaround for known bug in C++17 on MSVC
-	target_compile_definitions(${PROJECT_NAME}_lib PUBLIC "_HAS_STD_BYTE=0")
+	target_compile_definitions(${PROJECT_NAME}_lib PRIVATE "_HAS_STD_BYTE=0")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	# set standard optimization level
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC -O2)
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE -O2)
 	# grant IEEE 754 compliance
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC -frounding-math)
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE -frounding-math)
 	# reserve enough stack size
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC -Wl,-z,stacksize=8421376)
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE -Wl,-z,stacksize=8421376)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	#Disable all optimizations
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC -O0)
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE -O0)
 	# reserve enough stack size
-	target_compile_options(${PROJECT_NAME}_lib PUBLIC -Wl,-z,stacksize=8421376)
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE -Wl,-z,stacksize=8421376)
 endif()
 
 

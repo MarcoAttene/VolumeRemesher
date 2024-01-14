@@ -65,7 +65,7 @@ inline void ip_error(const char *msg) {
 #endif
 
 // 64-bit
-#ifdef IS64BITPLATFORM
+#if defined(IS64BITPLATFORM) && !defined(VR_DISABLE_SIMD)
 #define USE_SIMD_INSTRUCTIONS
 #endif
 
