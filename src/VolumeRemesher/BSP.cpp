@@ -1,6 +1,7 @@
 #include "BSP.h"
 #include "delaunay.h"
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <set>
@@ -2229,8 +2230,6 @@ void BSPcomplex::computeBaricenter(const vector<uint32_t> &vrts) {
       sum_y += cy;
       sum_z += cz;
       np++;
-      break; // This line should be commented to have an actual barycenter
-             // !!!!!!
     }
 
   vertices.push_back(new explicitPoint3D(sum_x / np, sum_y / np, sum_z / np));
@@ -2365,6 +2364,17 @@ void BSPcomplex::makeTetrahedra(bool verbose) {
       vector<uint32_t> cell_vrts(4, UINT32_MAX);
       list_cellVertices(cells[cell_i], 6, cell_vrts);
       final_tets.insert(final_tets.end(), cell_vrts.begin(), cell_vrts.end());
+      const uint32_t v0 = final_tets[final_tets.size() - 4];
+      const uint32_t v1 = final_tets[final_tets.size() - 3];
+      const uint32_t v2 = final_tets[final_tets.size() - 2];
+      const uint32_t v3 = final_tets[final_tets.size() - 1];
+      if (genericPoint::orient3D(*vertices[v0], *vertices[v1], *vertices[v2],
+                                 *vertices[v3]) > 0) {
+        assert(final_tets[final_tets.size() - 4] == v0);
+        assert(final_tets[final_tets.size() - 3] == v1);
+        final_tets[final_tets.size() - 4] = v1;
+        final_tets[final_tets.size() - 3] = v0;
+      }
       final_tets_parent.push_back(cell_i);
       final_tets_parent_faces.emplace_back();
       for (uint64_t face_i : cells[cell_i].faces)
@@ -2393,6 +2403,19 @@ void BSPcomplex::makeTetrahedra(bool verbose) {
         list_faceVertices(faces[face_i], face_vrts);
         final_tets.insert(final_tets.end(), face_vrts.begin(), face_vrts.end());
         final_tets.push_back(decomposition_vrt[cell_i]);
+
+        const uint32_t v0 = final_tets[final_tets.size() - 4];
+        const uint32_t v1 = final_tets[final_tets.size() - 3];
+        const uint32_t v2 = final_tets[final_tets.size() - 2];
+        const uint32_t v3 = final_tets[final_tets.size() - 1];
+        if (genericPoint::orient3D(*vertices[v0], *vertices[v1], *vertices[v2],
+                                   *vertices[v3]) > 0) {
+          assert(final_tets[final_tets.size() - 4] == v0);
+          assert(final_tets[final_tets.size() - 3] == v1);
+          final_tets[final_tets.size() - 4] = v1;
+          final_tets[final_tets.size() - 3] = v0;
+        }
+
         final_tets_parent.push_back(cell_i);
         final_tets_parent_faces.emplace_back();
         final_tets_parent_faces.back().push_back(face_i);
