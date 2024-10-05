@@ -1,6 +1,7 @@
 #include "BSP.h"
 #include "delaunay.h"
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <set>
@@ -2229,8 +2230,6 @@ void BSPcomplex::computeBaricenter(const vector<uint32_t> &vrts) {
       sum_y += cy;
       sum_z += cz;
       np++;
-      break; // This line should be commented to have an actual barycenter
-             // !!!!!!
     }
 
   vertices.push_back(new explicitPoint3D(sum_x / np, sum_y / np, sum_z / np));
@@ -2302,7 +2301,7 @@ bool BSPcomplex::cell_is_tetrahedrizable_from_v(const BSPcell &cell,
 
 //
 //
-void BSPcomplex::makeTetrahedra() {
+void BSPcomplex::makeTetrahedra(bool verbose) {
   uint64_t tet_num = 0; // total number of tetrahedra in which the cell will
                         // be decomposed.
   std::vector<uint32_t> decomposition_type(cells.size(), 0);
@@ -2320,8 +2319,8 @@ void BSPcomplex::makeTetrahedra() {
 
   for (uint64_t cell_i = 0; cell_i < cells.size(); cell_i++) {
     BSPcell &cell = cells[cell_i];
-    if (cell.place != INTERNAL_A)
-      continue;
+    // if (cell.place != INTERNAL_A)
+    //   continue;
 
     // If cell has more than 4 faces -> chose between types 1 and 2
     if (cell.faces.size() > 4) {
@@ -2334,21 +2333,21 @@ void BSPcomplex::makeTetrahedra() {
       // Check if cell is tetrahedralizable from a vertex.
       bool needs_barycenter = true;
       for (uint32_t cv = 0; cv < cell_vrts.size(); cv++)
-        if (cell_is_tetrahedrizable_from_v(cell, cell_vrts[cv])) {
-          decomposition_type[cell_i] = 1;
-          decomposition_vrt[cell_i] = cell_vrts[cv];
-          tet_num += cell.faces.size() -
-                     count_cellFaces_inc_cellVrt(cell, cell_vrts[cv]);
-          needs_barycenter = false;
-          break;
-        }
+        // if (cell_is_tetrahedrizable_from_v(cell, cell_vrts[cv])) {
+        //   decomposition_type[cell_i] = 1;
+        //   decomposition_vrt[cell_i] = cell_vrts[cv];
+        //   tet_num += cell.faces.size() -
+        //              count_cellFaces_inc_cellVrt(cell, cell_vrts[cv]);
+        //   needs_barycenter = false;
+        //   break;
+        // }
 
-      if (needs_barycenter) { // Cell need baricenter
-        decomposition_type[cell_i] = 2;
-        computeBaricenter(cell_vrts);
-        decomposition_vrt[cell_i] = ((uint32_t)vertices.size() - 1);
-        tet_num += cell.faces.size();
-      }
+        if (needs_barycenter) { // Cell need baricenter
+          decomposition_type[cell_i] = 2;
+          computeBaricenter(cell_vrts);
+          decomposition_vrt[cell_i] = ((uint32_t)vertices.size() - 1);
+          tet_num += cell.faces.size();
+        }
 
     } else
       tet_num++; // The cell is a tet.
@@ -2359,36 +2358,72 @@ void BSPcomplex::makeTetrahedra() {
   // Make tets
   for (uint64_t cell_i = 0; cell_i < cells.size(); cell_i++) {
     BSPcell &cell = cells[cell_i];
-    if (cell.place != INTERNAL_A)
-      continue;
+    // if (cell.place != INTERNAL_A)
+    //   continue;
     if (decomposition_type[cell_i] == 0) { // Simple tet
       vector<uint32_t> cell_vrts(4, UINT32_MAX);
       list_cellVertices(cells[cell_i], 6, cell_vrts);
       final_tets.insert(final_tets.end(), cell_vrts.begin(), cell_vrts.end());
-    } else if (decomposition_type[cell_i] ==
-               1) { // Tetrahedralizable from vertex
-      uint32_t v = decomposition_vrt[cell_i];
-      uint64_t num_incFaces = count_cellFaces_inc_cellVrt(cells[cell_i], v);
-      uint64_t num_NOT_incFaces = cells[cell_i].faces.size() - num_incFaces;
-      vector<uint64_t> v_NOT_incFaces(num_NOT_incFaces, UINT64_MAX);
-      COMPL_cell_VFrelation(cells[cell_i], v, v_NOT_incFaces);
-      for (uint64_t face_i : v_NOT_incFaces) {
-        // Simple triangle
-        vector<uint32_t> face_vrts(3, UINT32_MAX);
-        list_faceVertices(faces[face_i], face_vrts);
-        final_tets.insert(final_tets.end(), face_vrts.begin(), face_vrts.end());
-        final_tets.push_back(v);
+      const uint32_t v0 = final_tets[final_tets.size() - 4];
+      const uint32_t v1 = final_tets[final_tets.size() - 3];
+      const uint32_t v2 = final_tets[final_tets.size() - 2];
+      const uint32_t v3 = final_tets[final_tets.size() - 1];
+      if (genericPoint::orient3D(*vertices[v0], *vertices[v1], *vertices[v2],
+                                 *vertices[v3]) > 0) {
+        assert(final_tets[final_tets.size() - 4] == v0);
+        assert(final_tets[final_tets.size() - 3] == v1);
+        final_tets[final_tets.size() - 4] = v1;
+        final_tets[final_tets.size() - 3] = v0;
       }
-    } else { // Uses cell barycenter
+      final_tets_parent.push_back(cell_i);
+      final_tets_parent_faces.emplace_back();
+      for (uint64_t face_i : cells[cell_i].faces)
+        final_tets_parent_faces.back().push_back(face_i);
+    }
+    // else if (decomposition_type[cell_i] == 1) { // Tetrahedralizable from
+    // vertex
+    //   uint32_t v = decomposition_vrt[cell_i];
+    //   uint64_t num_incFaces = count_cellFaces_inc_cellVrt(cells[cell_i],
+    //   v); uint64_t num_NOT_incFaces = cells[cell_i].faces.size() -
+    //   num_incFaces; vector<uint64_t> v_NOT_incFaces(num_NOT_incFaces,
+    //   UINT64_MAX); COMPL_cell_VFrelation(cells[cell_i], v,
+    //   v_NOT_incFaces); for (uint64_t face_i : v_NOT_incFaces) {
+    //     // Simple triangle
+    //     vector<uint32_t> face_vrts(3, UINT32_MAX);
+    //     list_faceVertices(faces[face_i], face_vrts);
+    //     final_tets.insert(final_tets.end(), face_vrts.begin(),
+    //     face_vrts.end()); final_tets.push_back(v);
+    //     final_tets_parent.push_back(cell_i);
+    //   }
+    // }
+    else { // Uses cell barycenter
       for (uint64_t face_i : cells[cell_i].faces) {
         // Simple triangle
         vector<uint32_t> face_vrts(3, UINT32_MAX);
         list_faceVertices(faces[face_i], face_vrts);
         final_tets.insert(final_tets.end(), face_vrts.begin(), face_vrts.end());
         final_tets.push_back(decomposition_vrt[cell_i]);
+
+        const uint32_t v0 = final_tets[final_tets.size() - 4];
+        const uint32_t v1 = final_tets[final_tets.size() - 3];
+        const uint32_t v2 = final_tets[final_tets.size() - 2];
+        const uint32_t v3 = final_tets[final_tets.size() - 1];
+        if (genericPoint::orient3D(*vertices[v0], *vertices[v1], *vertices[v2],
+                                   *vertices[v3]) > 0) {
+          assert(final_tets[final_tets.size() - 4] == v0);
+          assert(final_tets[final_tets.size() - 3] == v1);
+          final_tets[final_tets.size() - 4] = v1;
+          final_tets[final_tets.size() - 3] = v0;
+        }
+
+        final_tets_parent.push_back(cell_i);
+        final_tets_parent_faces.emplace_back();
+        final_tets_parent_faces.back().push_back(face_i);
       }
     }
   }
+  if (verbose)
+    printf("Tetrahedra: %lu\n", final_tets.size() / 4);
 }
 
 //-Decide colour of GREY faces--------------------------------------------------

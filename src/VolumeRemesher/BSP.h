@@ -183,6 +183,11 @@ public:
 
   std::vector<uint32_t> final_tets; // Simple vector storing the tetrahedra
                                     // (only used when saving a tet-mesh)
+  std::vector<uint32_t>
+      final_tets_parent; // Simple vector storing the tetrahedra cell parent
+  std::vector<std::vector<uint32_t>>
+      final_tets_parent_faces; // Simple vector storing the tetrahedra cell
+                               // parent faces
 
   // Supporting vectors
   std::vector<char> vrts_orBin;     // Used to "cache" vertex orientations
@@ -332,7 +337,7 @@ public:
   uint64_t triFace_shareEdge(const BSPcell &cell, uint64_t face_ind,
                              uint64_t vOppEdge_ind);
   bool cell_is_tetrahedrizable_from_v(const BSPcell &cell, uint32_t v);
-  void makeTetrahedra();
+  void makeTetrahedra(bool verbose = false);
 };
 
 /// <summary>

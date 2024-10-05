@@ -38,15 +38,18 @@ namespace vol_rem {
 ///
 /// <param name="verbose">Set to TRUE to enable verbosity.</param>
 
-void embed_tri_in_poly_mesh(const std::vector<double> &tri_vrt_coords,
-                            const std::vector<uint32_t> &triangle_indexes,
-                            const std::vector<double> &tet_vrt_coords,
-                            const std::vector<uint32_t> &tet_indexes,
-                            std::vector<bigrational> &vertices,
-                            std::vector<uint32_t> &facets,
-                            std::vector<uint32_t> &cells,
-                            std::vector<uint32_t> &facets_on_input,
-                            bool verbose);
+void embed_tri_in_poly_mesh(
+    const std::vector<double> &tri_vrt_coords,
+    const std::vector<uint32_t> &triangle_indexes,
+    const std::vector<double> &tet_vrt_coords,
+    const std::vector<uint32_t> &tet_indexes,
+    std::vector<bigrational> &vertices, std::vector<uint32_t> &facets,
+    std::vector<uint32_t> &cells,
+    std::vector<std::array<uint32_t, 4>> &out_tets,
+    std::vector<uint32_t> &final_tets_parent,
+    std::vector<uint32_t> &facets_on_input,
+    std::vector<bool> &cells_with_faces_on_input,
+    std::vector<std::vector<uint32_t>> &final_tets_parent_faces, bool verbose);
 
 //
 // TO DO: CONSIDER INPUT POINTS AND SEGMENTS

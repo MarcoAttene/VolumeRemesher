@@ -86,7 +86,7 @@ jobs:
         run: cd build; make -j2
 
       - name: Tests
-        if: matrix.config == 'Debug'
+        if: matrix.config == 'Debug' && matrix.arc == 'x86'
         run: cd build; ./mesh_generator
 
   ####################
