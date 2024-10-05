@@ -2,6 +2,8 @@
 #include "BSP.h"
 
 #include <vector>
+#include <array>
+
 namespace vol_rem {
 void embed_tri_in_poly_mesh(const std::vector<double> &tri_vrt_coords,
                             const std::vector<uint32_t> &triangle_indexes,
