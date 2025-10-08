@@ -26,10 +26,11 @@ void embed_tri_in_poly_mesh(
       tet_vrt_coords.data(), (uint32_t)tet_vrt_coords.size() / 3,
       tet_indexes.data(), (uint32_t)tet_indexes.size() / 4, verbose, true);
 
-  for (size_t f_id = 0; f_id < complex->faces.size(); f_id++)
-    complex->triangulateFace(f_id);
+  // TODOfix: triangulateFace can cause degenerate triangles. While this is not fixed the triangulation and tetrahedralization is commented out
+  // for (size_t f_id = 0; f_id < complex->faces.size(); f_id++)
+  //   complex->triangulateFace(f_id);
 
-  complex->makeTetrahedra(verbose);
+  // complex->makeTetrahedra(verbose);
 
   if (verbose)
     printf("Producing vertices...\n");
