@@ -74,13 +74,13 @@
 #define USE_SIMD_INSTRUCTIONS
 #define USE_AVX2_INSTRUCTIONS
 #endif
-#ifdef __ARM_NEON
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <x86/avx2.h>
-#include <x86/fma.h>
-#define USE_SIMD_INSTRUCTIONS
-#define USE_AVX2_INSTRUCTIONS
-#else
+// #ifdef __ARM_NEON
+// #define SIMDE_ENABLE_NATIVE_ALIASES
+//#include <x86/avx2.h>
+//#include <x86/fma.h>
+// #define USE_SIMD_INSTRUCTIONS
+// #define USE_AVX2_INSTRUCTIONS
+// #else
 #ifdef USE_SIMD_INSTRUCTIONS
 #ifdef USE_AVX2_INSTRUCTIONS
 #include <immintrin.h>
@@ -88,7 +88,7 @@
 #include <emmintrin.h>
 #endif
 #endif
-#endif
+// #endif
 #endif
 
 #ifdef _MSC_VER
