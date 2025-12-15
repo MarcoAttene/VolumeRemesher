@@ -7,10 +7,15 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set (SOURCES
     src/VolumeRemesher/makePolyhedralMesh.cpp
+    src/VolumeRemesher/delaunay.h
     src/VolumeRemesher/delaunay.cpp
+    src/VolumeRemesher/embed.h
     src/VolumeRemesher/embed.cpp
+    src/VolumeRemesher/conforming_mesh.h
     src/VolumeRemesher/conforming_mesh.cpp
+    src/VolumeRemesher/extended_predicates.h
     src/VolumeRemesher/extended_predicates.cpp
+    src/VolumeRemesher/BSP.h
     src/VolumeRemesher/BSP.cpp
     src/VolumeRemesher/inOutPartition.cpp
 )
