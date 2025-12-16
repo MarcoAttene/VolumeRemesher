@@ -938,8 +938,9 @@ BSPcomplex::BSPcomplex(
         // Constraints improperly intersecated by tet.
         if (num_map[tet_ind] > 0) {
             cells[cell_ind].constraints.resize(num_map[tet_ind]);
+            uint32_t l = num_map[tet_ind] - 1;
             for (uint32_t i = 0; i < num_map[tet_ind]; i++)
-                cells[cell_ind].constraints[i] = map[tet_ind][i];
+                cells[cell_ind].constraints[i] = map[tet_ind][l - i];
         }
 
         // Adding BSPface and BSPedges to create a BSPcell conformed to tetrahedron.
@@ -2363,7 +2364,7 @@ bool BSPcomplex::cell_is_tetrahedrizable_from_v(const BSPcell& cell, uint32_t v)
 void BSPcomplex::makeTetrahedra()
 {
     uint64_t tet_num = 0; // total number of tetrahedra in which the cell will
-    // be decomposed.
+                          // be decomposed.
     std::vector<uint32_t> decomposition_type(cells.size(), 0);
     // Possible decoposition techniques are:
     // 0 - cell is a tetrahedron -> no decomposition.
