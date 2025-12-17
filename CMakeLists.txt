@@ -1,15 +1,21 @@
 cmake_minimum_required(VERSION 3.10)
 
-# use gcc and g++ instead of clang
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-set(CMAKE_CXX_COMPILER "g++-10")
-endif()
+# Set the target architecture.
+# All modern x86/x64 processors support AVX2.
+# Older x86/x64 processors may support SSE2 but not AVX2.
+# Very old x86/x64 processors, or non x86/x64 
+# processors, do not support any of the two.
+set(ENABLE_SSE2 True)
+set(ENABLE_AVX2 True)
+
+#####################
+
 
 # set the project name
 project(mesh_generator)
 
 # specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set (SOURCES
@@ -48,14 +54,18 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	target_compile_options(${TARGET} PUBLIC "/fp:strict")
 # use intrinsic functions
 	target_compile_options(${TARGET} PUBLIC "/Oi")
-# reserve enough stack size
-	target_link_options(${TARGET} PUBLIC "/STACK:8421376")
+	# set target architecture
+	if(ENABLE_AVX2)
+		target_compile_options(${PROJECT_NAME} PUBLIC "/arch:AVX2")
+	elseif(ENABLE_SSE2)
+		target_compile_options(${PROJECT_NAME} PUBLIC "/arch:SSE2")
+	endif()
 # turn off annoying warnings
 	target_compile_options(${TARGET} PUBLIC "/D _CRT_SECURE_NO_WARNINGS") 
 	target_compile_options(${TARGET} PUBLIC "/D _CRT_NONSTDC_NO_WARNINGS") 
 # workaround for known bug in C++17 on MSVC
 	target_compile_options(${TARGET} PUBLIC "/D _HAS_STD_BYTE=0")
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+else()
 	set(GMP_HOME_DIR "gmp/6.2.1_1")
 	set(GMP_LIB_NAME "gmp")
 	set(GMP_INCLUDE_DIR ${GMP_HOME_DIR}/include)
@@ -65,18 +75,13 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	target_compile_options(${TARGET} PUBLIC -O2)
 # grant IEEE 754 compliance
 	target_compile_options(${TARGET} PUBLIC -frounding-math)
-# reserve enough stack size	
-	target_compile_options(${TARGET} PUBLIC -Wl,-z,stacksize=8421376)
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	set(GMP_HOME_DIR "gmp/6.2.1_1")
-	set(GMP_LIB_NAME "gmp")
-	set(GMP_INCLUDE_DIR ${GMP_HOME_DIR}/include)
-	set(GMP_LIB_DIR ${GMP_HOME_DIR}/lib)
-
-#Disable all optimizations
-	target_compile_options(${TARGET} PUBLIC -O0)
-# reserve enough stack size	
-	target_compile_options(${TARGET} PUBLIC -Wl,-z,stacksize=8421376)
+	# set target architecture
+	if(ENABLE_AVX2)
+		target_compile_options(${PROJECT_NAME} PUBLIC "-mavx2")
+		target_compile_options(${PROJECT_NAME} PUBLIC "-mfma")
+	elseif(ENABLE_SSE2)
+		target_compile_options(${PROJECT_NAME} PUBLIC "-msse2")
+	endif()
 endif()
 
 # Public include directory

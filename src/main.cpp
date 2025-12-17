@@ -200,14 +200,14 @@ int main(int argc, char** argv)
         }
     }
 #else
-    bool triangulate = true;
+    bool triangulate = false;
     bool verbose = true;
     bool logging = false;
     bool surfmesh = false;
     bool blackfaces = false;
-    char* fileA_name = "D:\\SYNC_DATA\\Sviluppo_Software\\My_Software\\GIT_REPOS\\VolumeRemesher\\models\\Octocat-v1.off";
-    char* fileB_name = "D:\\SYNC_DATA\\Sviluppo_Software\\My_Software\\GIT_REPOS\\VolumeRemesher\\models\\Octocat.bg.tet";
-    char bool_opcode = 'U';
+    const char* fileA_name = "D:\\SYNC_DATA\\Sviluppo_Software\\Datasets\\Thingi10K\\off_meshes\\101213.off";
+    const char* fileB_name = NULL;// "D:\\SYNC_DATA\\Sviluppo_Software\\My_Software\\GIT_REPOS\\VolumeRemesher\\models\\Octocat.bg.tet";
+    char bool_opcode = '0';
     bool two_input = (bool_opcode != '0');
 #endif
 

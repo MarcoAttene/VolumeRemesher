@@ -854,8 +854,8 @@ BSPcomplex::BSPcomplex(const TetMesh* mesh, const constraints_t* _constraints,
     // Constraints improperly intersecated by tet.
     if(num_map[tet_ind]>0){
       cells[cell_ind].constraints.resize( num_map[tet_ind] );
-      for(uint32_t i=0; i<num_map[tet_ind]; i++)
-        cells[cell_ind].constraints[i] = map[tet_ind][i];
+      for (uint32_t i = 0; i < num_map[tet_ind]; i++)
+          cells[cell_ind].constraints[i] = map[tet_ind][i];
     }
 
     // Adding BSPface and BSPedges to create a BSPcell conformed to tetrahedron.
@@ -1856,16 +1856,26 @@ void BSPcomplex::find_coplanar_constraints(uint64_t cell_ind, uint32_t constr,
 //       strictly convexity is not guaranteed.
 void BSPcomplex::splitCell(uint64_t cell_ind){
 
-  // Extract the last contraint that intersect the cell and remove it from
-  // the list. The cell will be splitted by that constraint.
-  BSPcell& cell = cells[cell_ind];
-  uint32_t constr = cell.constraints.back();
-  uint32_t constr_ID = 3*constr;
-  uint32_t c0 = constraints_vrts[constr_ID  ];
-  uint32_t c1 = constraints_vrts[constr_ID+1];
-  uint32_t c2 = constraints_vrts[constr_ID+2];
+    // Extract the last contraint that intersect the cell and remove it from
+    // the list. The cell will be splitted by that constraint.
+    BSPcell& cell = cells[cell_ind];
+    auto& cts = cell.constraints;
+    uint32_t constr = cts.back();
+    cts.pop_back();
 
-  cell.constraints.pop_back();
+    // Virtual constraints should be used only when non-virtual constraints are over
+    if (is_virtual(constr)) {
+        for (size_t i = 0; i < cts.size(); i++) if (!is_virtual(cts[i])) {
+            std::swap(cts[i], constr);
+            break;
+        }
+    }
+
+    uint32_t constr_ID = 3 * constr;
+    uint32_t c0 = constraints_vrts[constr_ID];
+    uint32_t c1 = constraints_vrts[constr_ID + 1];
+    uint32_t c2 = constraints_vrts[constr_ID + 2];
+
 
   // Search for coplanar constraints.
   vector<uint32_t> coplanar_constr;
