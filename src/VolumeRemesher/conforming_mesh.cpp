@@ -484,6 +484,11 @@ uint32_t opposite_vertex_face(const TetMesh* mesh, uint64_t tet_ind, const uint3
 //        (i.e. the other 3 vertices of tet).
 void opposite_face_vertices(const TetMesh* mesh, uint64_t tet_ind, uint32_t v_ind, uint32_t* ptr)
 {
+    // v_ind must be a corner of the tet, or the four other corners overflow ptr[3]. A vertex
+    // that is in no tet (its incident-tet entry stale) produced exactly that, silently.
+    const uint32_t* tn = mesh->tet_node.data() + 4 * tet_ind;
+    if (tn[0] != v_ind && tn[1] != v_ind && tn[2] != v_ind && tn[3] != v_ind)
+        ip_error("opposite_face_vertices: vertex is not a corner of the tetrahedron\n");
     uint32_t j = 0, curr_v_ind;
     curr_v_ind = mesh->tet_node[4 * tet_ind];
     if (curr_v_ind != v_ind) ptr[j++] = curr_v_ind;
