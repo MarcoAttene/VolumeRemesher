@@ -3672,12 +3672,20 @@ void insert_edges_and_points(
     // other: an exact-duplicate explicit point makes the Delaunay's symbolic perturbation
     // fail (real meshes routinely produce coincident forcing-triangle apexes). Reusing a
     // coincident vertex is safe -- the two/three forcing triangles still pin their edge /
-    // point. -0.0 is normalized to 0.0 so it matches +0.0. First occurrence wins, so the
-    // mapping is deterministic.
+    // point. -0.0 is normalized to 0.0 so it matches +0.0.
+    //
+    // Among existing vertices at the same position the LAST one wins. remakePolyhedralMesh
+    // appends the surface vertices after the background ones, and the background mesh may
+    // already have a vertex at a surface vertex's position (wildmeshing-toolkit's tetwild
+    // builds it from the input vertices plus box points). Inserting the surface copy then
+    // takes the background copy's place in the tets and leaves the background copy in none.
+    // A feature mapped to that copy walks from a vertex no tet contains, and VT() returns
+    // tets that do not hold it (opposite_face_vertices then wrote 4 entries into a 3-entry
+    // array). Within one block the vertices are unique, so the choice is deterministic.
     auto norm = [](double d) -> double { return d == 0.0 ? 0.0 : d; };
     std::unordered_map<std::array<double, 3>, uint32_t, CoordHash> vmap;
     vmap.reserve(base_v + nv_add);
-    for (uint32_t v = 0; v < base_v; v++)
+    for (uint32_t v = base_v; v-- > 0;)
         vmap.emplace(
             std::array<double, 3>{
                 norm(mesh->vertices[v].X()),

@@ -118,3 +118,10 @@ if(WIN32 AND VOLUMEREMESHER_WITH_GMP AND HAS_GMPXX)
 		COMMAND_EXPAND_LISTS)
 endif()
 catch_discover_tests(unit_tests_3d)
+
+# Forced points and edges on a background that already has the surface's vertices, and forced
+# points whose forcing-triangle corners would leave the background (feature_vertex_regression.cpp).
+add_executable(feature_vertex_regression feature_vertex_regression.cpp)
+target_link_libraries(feature_vertex_regression PRIVATE Catch2::Catch2WithMain VolumeRemesher::VolumeRemesher)
+target_compile_features(feature_vertex_regression PRIVATE cxx_std_20)
+catch_discover_tests(feature_vertex_regression)
