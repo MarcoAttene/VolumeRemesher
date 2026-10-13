@@ -3587,7 +3587,8 @@ void insert_edges_and_points(
     constraints_t* constraints,
     TetMesh* mesh,
     const extra_features_t& extra,
-    bool verbose)
+    bool verbose,
+    bool keep_corners_inside)
 {
     const uint32_t n_edges = extra.n_edges;
     const uint32_t n_points = extra.n_points;
@@ -3693,6 +3694,20 @@ void insert_edges_and_points(
                 norm(mesh->vertices[v].Z())},
             v);
 
+    // The box the corners must stay in (keep_corners_inside): that of the vertices already in the
+    // mesh. Without it, a forced point or edge on the maximum side of the background mesh -- a
+    // surface vertex at the input's bounding-box maximum, with tetwild's diag/15 padding smaller
+    // than the displacement -- put a corner outside every tet, and the embedding hung or crashed.
+    double box_hi[3] = {-DBL_MAX, -DBL_MAX, -DBL_MAX};
+    if (keep_corners_inside)
+        for (uint32_t v = 0; v < base_v; v++)
+            for (int k = 0; k < 3; k++)
+                box_hi[k] = std::max(box_hi[k], mesh->vertices[v].coord[k]);
+    // The displacement along axis k from coordinate c: +L, or -L if +L would leave the box.
+    auto corner_disp = [&](double c, int k, double L) -> double {
+        return (keep_corners_inside && c + L > box_hi[k]) ? -L : L;
+    };
+
     uint32_t ti = base_t;
     auto add_vertex = [&](double x, double y, double z) -> uint32_t {
         const std::array<double, 3> key = {norm(x), norm(y), norm(z)};
@@ -3743,11 +3758,11 @@ void insert_edges_and_points(
             if (k == drop) continue;
             double ax = A.X(), ay = A.Y(), az = A.Z();
             if (k == 0)
-                ax += Le;
+                ax += corner_disp(ax, 0, Le);
             else if (k == 1)
-                ay += Le;
+                ay += corner_disp(ay, 1, Le);
             else
-                az += Le;
+                az += corner_disp(az, 2, Le);
             const uint32_t iap = add_vertex(ax, ay, az);
             add_tri(ia, ib, iap);
         }
@@ -3759,9 +3774,9 @@ void insert_edges_and_points(
         const double px = extra.point_verts[3 * p], py = extra.point_verts[3 * p + 1],
                      pz = extra.point_verts[3 * p + 2];
         const uint32_t ip = add_vertex(px, py, pz);
-        const uint32_t iax = add_vertex(px + point_disp, py, pz);
-        const uint32_t iay = add_vertex(px, py + point_disp, pz);
-        const uint32_t iaz = add_vertex(px, py, pz + point_disp);
+        const uint32_t iax = add_vertex(px + corner_disp(px, 0, point_disp), py, pz);
+        const uint32_t iay = add_vertex(px, py + corner_disp(py, 1, point_disp), pz);
+        const uint32_t iaz = add_vertex(px, py, pz + corner_disp(pz, 2, point_disp));
         add_tri(ip, iax, iay);
         add_tri(ip, iay, iaz);
         add_tri(ip, iaz, iax);

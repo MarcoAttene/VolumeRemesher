@@ -140,3 +140,24 @@ TEST_CASE("a forced edge starting at a surface vertex that the background also h
     REQUIRE(r.edge_provenance.size() == 1);
     CHECK(!r.edge_provenance[0].empty());
 }
+
+// The corner at (2,2,2) is on the background's maximum side, 0.2 inside it. The point's forcing
+// triangles reach 0.228 along +x, +y and +z, and the edge's reach 0.287 along +y and +z, so
+// both would leave the background mesh unless their corners point inward.
+TEST_CASE("a forced point whose forcing corners would leave the background", "[feature_vertex]")
+{
+    const double p[3] = {2, 2, 2};
+    const Result r = embed({}, {}, std::vector<double>(p, p + 3));
+    REQUIRE(!r.tets.empty());
+    REQUIRE(r.point_provenance.size() == 1);
+    CHECK(vertex_at(r, r.point_provenance[0][1], p));
+}
+
+TEST_CASE("a forced edge whose forcing corners would leave the background", "[feature_vertex]")
+{
+    const std::vector<double> e = {2, 2, 2, 0, 0, 1.5};
+    const Result r = embed(e, {0, 1}, {});
+    REQUIRE(!r.tets.empty());
+    REQUIRE(r.edge_provenance.size() == 1);
+    CHECK(!r.edge_provenance[0].empty());
+}

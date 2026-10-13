@@ -876,7 +876,8 @@ BSPcomplex* remakePolyhedralMesh(
     // surface, and their forcing triangles ride through the rest of the pipeline as
     // ordinary (non-surface) constraints. They must lie inside the tet mesh domain.
     const bool has_extra_embed = extra && (extra->n_edges > 0 || extra->n_points > 0);
-    if (has_extra_embed) insert_edges_and_points(constraints, mesh, *extra, verbose);
+    if (has_extra_embed)
+        insert_edges_and_points(constraints, mesh, *extra, verbose, /*keep_corners_inside=*/true);
 
 #ifndef NDEBUG
     // Debug guard: inserted edge/point vertices -- and their forcing-triangle apexes, which

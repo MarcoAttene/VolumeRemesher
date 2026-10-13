@@ -90,8 +90,17 @@ struct extra_features_t
 // vertex P, pinning it). New vertices are appended to the mesh and the forcing
 // triangles to the constraints (num_edge_triangles / num_point_triangles record the
 // counts). Must run before the Delaunay permutation and place_virtual_constraints.
+//
+// keep_corners_inside: the forcing-triangle corners must stay inside the bounding box of the
+// vertices already in the mesh -- set when embedding into a given tet mesh, whose vertices are
+// all the room there is. A corner that +L along an axis would leave that box is placed at -L
+// instead; the triangles still meet only along AB (or only at P), so they pin it the same way.
 void insert_edges_and_points(
-    constraints_t* constraints, TetMesh* mesh, const extra_features_t& extra, bool verbose);
+    constraints_t* constraints,
+    TetMesh* mesh,
+    const extra_features_t& extra,
+    bool verbose,
+    bool keep_corners_inside = false);
 uint32_t
 place_virtual_constraints(TetMesh* mesh, constraints_t* constraints, half_edge_t* half_edges);
 void insert_constraints(
